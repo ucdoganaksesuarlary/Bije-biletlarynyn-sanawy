@@ -1,1 +1,320 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bilet Barla - Şansly Bilet Ulgamy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --primary: #6366f1;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a5b4fc, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* Controls Section */
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-box input:focus { border-color: var(--primary); }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-filter {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-filter.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Stats Box */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-card .num { font-size: 18px; font-weight: 700; margin-top: 4px; }
+    .stat-card.all .num { color: #a5b4fc; }
+    .stat-card.sold .num { color: var(--accent-red); }
+    .stat-card.free .num { color: var(--accent-green); }
+
+    /* Grid Layout for Tickets */
+    .tickets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .ticket-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .ticket-card.free { border-top: 4px solid var(--accent-green); }
+    .ticket-card.sold { border-top: 4px solid var(--accent-red); background: rgba(239, 68, 68, 0.05); }
+
+    .ticket-number {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .ticket-status {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .free .ticket-status { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+    .sold .ticket-status { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+
+    .owner-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 6px;
+      text-align: left;
+    }
+
+    .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: 30px;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>BİLET REÝESTR ULGAMY</h1>
+    <p>1-den 5000-e çenli biletleriň reallawdyrylyş ýagdaýy</p>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-card all">
+      <div style="font-size:11px; color:var(--text-muted);">JEMI BİLET</div>
+      <div class="num" id="stat-total">5000</div>
+    </div>
+    <div class="stat-card sold">
+      <div style="font-size:11px; color:var(--text-muted);">SATYLDY</div>
+      <div class="num" id="stat-sold">0</div>
+    </div>
+    <div class="stat-card free">
+      <div style="font-size:11px; color:var(--text-muted);">BOŞ BİLET</div>
+      <div class="num" id="stat-free">5000</div>
+    </div>
+  </div>
+
+  <div class="controls-card">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Bilet belgisi ýa-da at gözle..." oninput="filterTickets()">
+    </div>
+    <div class="filter-buttons">
+      <button class="btn-filter active" onclick="setFilter('all', this)">Ählisi</button>
+      <button class="btn-filter" onclick="setFilter('free', this)">Boş Biletler</button>
+      <button class="btn-filter" onclick="setFilter('sold', this)">Satylanlar</button>
+    </div>
+  </div>
+
+  <div class="tickets-grid" id="ticketsGrid">
+    <!-- Dynamic Content -->
+  </div>
+
+  <footer>
+    © 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.
+  </footer>
+</div>
+
+<script>
+  // SATYLAN BİLETLERİŇ SANAWY (Şu ýere taze satylan biletleri goşuň)
+  // Meselem: id: bilet belgisi, name: Ady we Familiyasy, phone: Telefon belgisi
+  const soldTickets = {
+    1: { name: "Aman Hayitmuradov", phone: "+99361234567" },
+    42: { name: "Merdan Weliýew", phone: "+99365112233" },
+    777: { name: "Batyr Berdiýew", phone: "+99362998877" },
+    1500: { name: "Mähri Esenowa", phone: "+99364554433" },
+    4999: { name: "Serdar Gurbanow", phone: "+99363001122" }
+  };
+
+  const TOTAL_TICKETS = 5000;
+  let currentFilter = 'all';
+
+  function renderTickets() {
+    const grid = document.getElementById('ticketsGrid');
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    grid.innerHTML = '';
+
+    let soldCount = Object.keys(soldTickets).length;
+    document.getElementById('stat-sold').innerText = soldCount;
+    document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
+
+    for (let i = 1; i <= TOTAL_TICKETS; i++) {
+      const isSold = !!soldTickets[i];
+      const owner = soldTickets[i];
+
+      // Filter Check
+      if (currentFilter === 'free' && isSold) continue;
+      if (currentFilter === 'sold' && !isSold) continue;
+
+      // Search Check
+      if (searchVal !== '') {
+        const numStr = i.toString();
+        const nameStr = isSold ? owner.name.toLowerCase() : '';
+        const phoneStr = isSold ? owner.phone.toLowerCase() : '';
+
+        if (!numStr.includes(searchVal) && !nameStr.includes(searchVal) && !phoneStr.includes(searchVal)) {
+          continue;
+        }
+      }
+
+      const card = document.createElement('div');
+      card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
+
+      if (isSold) {
+        card.innerHTML = `
+          <div class="ticket-number">#${i}</div>
+          <span class="ticket-status">Satyldy</span>
+          <div class="owner-info">
+            <span>${owner.name}</span>
+            <small>${owner.phone}</small>
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="ticket-number">#${i}</div>
+          <span class="ticket-status">Boş</span>
+          <div class="owner-info" style="border:none; text-align:center;">
+            <small style="color: var(--accent-green);">Satyn alyp bolýar</small>
+          </div>
+        `;
+      }
+
+      grid.appendChild(card);
+    }
+  }
+
+  function setFilter(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTickets();
+  }
+
+  function filterTickets() {
+    renderTickets();
+  }
+
+  // Initial Load
+  renderTickets();
+</script>
+
+</body>
+</html>
