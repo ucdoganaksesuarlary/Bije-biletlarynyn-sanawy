@@ -145,11 +145,8 @@
       border-radius: 12px;
       padding: 12px;
       text-align: center;
-      transition: transform 0.2s;
-      cursor: pointer;
     }
 
-    .ticket-card:hover { transform: translateY(-2px); }
     .ticket-card.free { border-top: 4px solid var(--accent-green); }
     .ticket-card.sold { border-top: 4px solid var(--accent-red); background: rgba(239, 68, 68, 0.05); }
 
@@ -235,11 +232,22 @@
 </div>
 
 <script>
-  // Brauzeriň ýadynda (LocalStorage) saklanýan satylan biletler
-  let soldTickets = JSON.parse(localStorage.getItem('shansly_sold_tickets')) || {};
-
+  let soldTickets = {};
   const TOTAL_TICKETS = 5000;
   let currentFilter = 'all';
+
+  // tickets.json faýlyny okamak
+  async function fetchSoldTickets() {
+    try {
+      const response = await fetch('tickets.json?v=' + new Date().getTime());
+      if (response.ok) {
+        soldTickets = await response.json();
+      }
+    } catch (e) {
+      console.log('JSON faýl okaýyşda ýalňyşlyk ýa-da heniz bilet goşulmady.');
+    }
+    renderTickets();
+  }
 
   function renderTickets() {
     const grid = document.getElementById('ticketsGrid');
@@ -269,7 +277,6 @@
 
       const card = document.createElement('div');
       card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
-      card.onclick = () => handleTicketClick(i);
 
       if (isSold) {
         card.innerHTML = `
@@ -285,33 +292,12 @@
           <div class="ticket-number">#${i}</div>
           <span class="ticket-status">Boş</span>
           <div class="owner-info" style="border:none; text-align:center;">
-            <small style="color: var(--accent-green);">+ Satyn aldy et</small>
+            <small style="color: var(--accent-green);">Boş Bilet</small>
           </div>
         `;
       }
 
       grid.appendChild(card);
-    }
-  }
-
-  // Biletin üstüne basylanda satylan diýip bellik etmek / aýyrmak
-  function handleTicketClick(ticketNum) {
-    if (soldTickets[ticketNum]) {
-      const confirmDelete = confirm(`#${ticketNum} bilet satylanlardan aýyrylsynmy?`);
-      if (confirmDelete) {
-        delete soldTickets[ticketNum];
-        localStorage.setItem('shansly_sold_tickets', JSON.stringify(soldTickets));
-        renderTickets();
-      }
-    } else {
-      const name = prompt(`#${ticketNum} bilet üçin Müşderiniň Ady we Familiýasy:`);
-      if (!name) return;
-      const phone = prompt(`#${ticketNum} bilet üçin Telefon belgisi:`);
-      if (!phone) return;
-
-      soldTickets[ticketNum] = { name: name.trim(), phone: phone.trim() };
-      localStorage.setItem('shansly_sold_tickets', JSON.stringify(soldTickets));
-      renderTickets();
     }
   }
 
@@ -326,7 +312,7 @@
     renderTickets();
   }
 
-  renderTickets();
+  fetchSoldTickets();
 </script>
 
 </body>
