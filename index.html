@@ -70,7 +70,6 @@
     .search-box {
       flex: 1;
       min-width: 250px;
-      position: relative;
     }
 
     .search-box input {
@@ -147,8 +146,10 @@
       padding: 12px;
       text-align: center;
       transition: transform 0.2s;
+      cursor: pointer;
     }
 
+    .ticket-card:hover { transform: translateY(-2px); }
     .ticket-card.free { border-top: 4px solid var(--accent-green); }
     .ticket-card.sold { border-top: 4px solid var(--accent-red); background: rgba(239, 68, 68, 0.05); }
 
@@ -195,7 +196,7 @@
 <div class="container">
   <div class="header">
     <h1>BİLET REÝESTR ULGAMY</h1>
-    <p>1-den 5000-e çenli biletleriň reallawdyrylyş ýagdaýy</p>
+    <p>1-den 5000-e çenli biletleriň satylyş ýagdaýy</p>
   </div>
 
   <div class="stats-container">
@@ -234,15 +235,8 @@
 </div>
 
 <script>
-  // SATYLAN BİLETLERİŇ SANAWY (Şu ýere taze satylan biletleri goşuň)
-  // Meselem: id: bilet belgisi, name: Ady we Familiyasy, phone: Telefon belgisi
-  const soldTickets = {
-    1: { name: "Aman Hayitmuradov", phone: "+99361234567" },
-    42: { name: "Merdan Weliýew", phone: "+99365112233" },
-    777: { name: "Batyr Berdiýew", phone: "+99362998877" },
-    1500: { name: "Mähri Esenowa", phone: "+99364554433" },
-    4999: { name: "Serdar Gurbanow", phone: "+99363001122" }
-  };
+  // Brauzeriň ýadynda (LocalStorage) saklanýan satylan biletler
+  let soldTickets = JSON.parse(localStorage.getItem('shansly_sold_tickets')) || {};
 
   const TOTAL_TICKETS = 5000;
   let currentFilter = 'all';
@@ -260,11 +254,9 @@
       const isSold = !!soldTickets[i];
       const owner = soldTickets[i];
 
-      // Filter Check
       if (currentFilter === 'free' && isSold) continue;
       if (currentFilter === 'sold' && !isSold) continue;
 
-      // Search Check
       if (searchVal !== '') {
         const numStr = i.toString();
         const nameStr = isSold ? owner.name.toLowerCase() : '';
@@ -277,6 +269,7 @@
 
       const card = document.createElement('div');
       card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
+      card.onclick = () => handleTicketClick(i);
 
       if (isSold) {
         card.innerHTML = `
@@ -292,12 +285,33 @@
           <div class="ticket-number">#${i}</div>
           <span class="ticket-status">Boş</span>
           <div class="owner-info" style="border:none; text-align:center;">
-            <small style="color: var(--accent-green);">Satyn alyp bolýar</small>
+            <small style="color: var(--accent-green);">+ Satyn aldy et</small>
           </div>
         `;
       }
 
       grid.appendChild(card);
+    }
+  }
+
+  // Biletin üstüne basylanda satylan diýip bellik etmek / aýyrmak
+  function handleTicketClick(ticketNum) {
+    if (soldTickets[ticketNum]) {
+      const confirmDelete = confirm(`#${ticketNum} bilet satylanlardan aýyrylsynmy?`);
+      if (confirmDelete) {
+        delete soldTickets[ticketNum];
+        localStorage.setItem('shansly_sold_tickets', JSON.stringify(soldTickets));
+        renderTickets();
+      }
+    } else {
+      const name = prompt(`#${ticketNum} bilet üçin Müşderiniň Ady we Familiýasy:`);
+      if (!name) return;
+      const phone = prompt(`#${ticketNum} bilet üçin Telefon belgisi:`);
+      if (!phone) return;
+
+      soldTickets[ticketNum] = { name: name.trim(), phone: phone.trim() };
+      localStorage.setItem('shansly_sold_tickets', JSON.stringify(soldTickets));
+      renderTickets();
     }
   }
 
@@ -312,7 +326,6 @@
     renderTickets();
   }
 
-  // Initial Load
   renderTickets();
 </script>
 
