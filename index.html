@@ -53,7 +53,6 @@
       margin-top: 5px;
     }
 
-    /* Controls Section */
     .controls-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -108,7 +107,6 @@
       border-color: var(--primary);
     }
 
-    /* Stats Box */
     .stats-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -129,7 +127,6 @@
     .stat-card.sold .num { color: var(--accent-red); }
     .stat-card.free .num { color: var(--accent-green); }
 
-    /* Grid Layout for Tickets */
     .tickets-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -192,7 +189,7 @@
 
 <div class="container">
   <div class="header">
-    <h1>BİLET REÝESTR ULGAMY</h1>
+    <h1>BİLET SANAW ULGAMY</h1>
     <p>1-den 5000-e çenli biletleriň satylyş ýagdaýy</p>
   </div>
 
@@ -236,7 +233,6 @@
   const TOTAL_TICKETS = 5000;
   let currentFilter = 'all';
 
-  // tickets.json faýlyny okamak
   async function fetchSoldTickets() {
     try {
       const response = await fetch('tickets.json?v=' + new Date().getTime());
@@ -244,7 +240,7 @@
         soldTickets = await response.json();
       }
     } catch (e) {
-      console.log('JSON faýl okaýyşda ýalňyşlyk ýa-da heniz bilet goşulmady.');
+      console.log('JSON faýl okalmandyr.');
     }
     renderTickets();
   }
