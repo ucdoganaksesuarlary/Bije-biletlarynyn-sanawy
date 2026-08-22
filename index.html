@@ -190,13 +190,13 @@
 <div class="container">
   <div class="header">
     <h1>BİLET SANAW ULGAMY</h1>
-    <p>1-den 5000-e çenli biletleriň satylyş ýagdaýy</p>
+    <p>1-den 100000-e çenli biletleriň satylyş ýagdaýy</p>
   </div>
 
   <div class="stats-container">
     <div class="stat-card all">
       <div style="font-size:11px; color:var(--text-muted);">JEMI BİLET</div>
-      <div class="num" id="stat-total">5000</div>
+      <div class="num" id="stat-total">100000</div>
     </div>
     <div class="stat-card sold">
       <div style="font-size:11px; color:var(--text-muted);">SATYLDY</div>
@@ -204,7 +204,7 @@
     </div>
     <div class="stat-card free">
       <div style="font-size:11px; color:var(--text-muted);">BOŞ BİLET</div>
-      <div class="num" id="stat-free">5000</div>
+      <div class="num" id="stat-free">100000</div>
     </div>
   </div>
 
@@ -230,7 +230,7 @@
 
 <script>
   let soldTickets = {};
-  const TOTAL_TICKETS = 5000;
+  const TOTAL_TICKETS = 100000;
   let currentFilter = 'all';
 
   async function fetchSoldTickets() {
