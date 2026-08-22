@@ -131,9 +131,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 12px;
-      max-height: 600px;
-      overflow-y: auto;
-      padding-right: 5px;
+      min-height: 200px;
     }
 
     .ticket-card {
@@ -176,6 +174,29 @@
 
     .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn-page {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-page:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
     footer {
       text-align: center;
       color: var(--text-muted);
@@ -210,7 +231,7 @@
 
   <div class="controls-card">
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Bilet belgisi ýa-da at gözle..." oninput="filterTickets()">
+      <input type="text" id="searchInput" placeholder="Bilet belgisi ýa-da at gözle..." oninput="onSearchChange()">
     </div>
     <div class="filter-buttons">
       <button class="btn-filter active" onclick="setFilter('all', this)">Ählisi</button>
@@ -219,8 +240,12 @@
     </div>
   </div>
 
-  <div class="tickets-grid" id="ticketsGrid">
-    <!-- Dynamic Content -->
+  <div class="tickets-grid" id="ticketsGrid"></div>
+
+  <div class="pagination-container">
+    <button class="btn-page" id="prevBtn" onclick="changePage(-1)">Yza</button>
+    <span id="pageInfo" style="font-size:13px; color:var(--text-muted);">Sahypa 1</span>
+    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Öňe</button>
   </div>
 
   <footer>
@@ -231,7 +256,10 @@
 <script>
   let soldTickets = {};
   const TOTAL_TICKETS = 100000;
+  const PAGE_SIZE = 60; // Bir sahypada 60 bilet görkezilýär
+  let currentPage = 1;
   let currentFilter = 'all';
+  let filteredList = [];
 
   async function fetchSoldTickets() {
     try {
@@ -240,19 +268,21 @@
         soldTickets = await response.json();
       }
     } catch (e) {
-      console.log('JSON faýl okalmandyr.');
+      console.log('JSON okaýyşda ýalňyşlyk.');
     }
-    renderTickets();
+    updateStats();
+    applyFilters();
   }
 
-  function renderTickets() {
-    const grid = document.getElementById('ticketsGrid');
-    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
-    grid.innerHTML = '';
-
-    let soldCount = Object.keys(soldTickets).length;
+  function updateStats() {
+    const soldCount = Object.keys(soldTickets).length;
     document.getElementById('stat-sold').innerText = soldCount;
     document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
+  }
+
+  function applyFilters() {
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    filteredList = [];
 
     for (let i = 1; i <= TOTAL_TICKETS; i++) {
       const isSold = !!soldTickets[i];
@@ -271,6 +301,24 @@
         }
       }
 
+      filteredList.push(i);
+    }
+
+    currentPage = 1;
+    renderPage();
+  }
+
+  function renderPage() {
+    const grid = document.getElementById('ticketsGrid');
+    grid.innerHTML = '';
+
+    const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filteredList.slice(startIndex, startIndex + PAGE_SIZE);
+
+    pageItems.forEach(i => {
+      const isSold = !!soldTickets[i];
+      const owner = soldTickets[i];
       const card = document.createElement('div');
       card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
 
@@ -292,20 +340,29 @@
           </div>
         `;
       }
-
       grid.appendChild(card);
-    }
+    });
+
+    document.getElementById('pageInfo').innerText = `Sahypa ${currentPage} / ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+  }
+
+  function changePage(direction) {
+    currentPage += direction;
+    renderPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function setFilter(type, btn) {
     currentFilter = type;
     document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    renderTickets();
+    applyFilters();
   }
 
-  function filterTickets() {
-    renderTickets();
+  function onSearchChange() {
+    applyFilters();
   }
 
   fetchSoldTickets();
