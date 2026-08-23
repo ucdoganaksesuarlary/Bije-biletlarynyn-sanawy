@@ -1,6 +1,10 @@
 {
-  "800": { "name": "Aýjan Weliýewa", "phone": "+905523904832" }
-}
-{
-  "33": { "name": "Alijan Yusupov", "phone": "5319467619" }
+  "33": {
+    "name": "Alijan Yusupov",
+    "phone": "5319467619"
+  },
+  "800": {
+    "name": "Aýjan Weliýewa",
+    "phone": "+905523904832"
+  }
 }
