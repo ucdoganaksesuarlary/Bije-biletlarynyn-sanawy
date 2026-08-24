@@ -114,7 +114,13 @@
   "100000": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
   "5000": { "name": "Satlyk Annaniyazow", "phone": "+905527040176" },
   "35000": { "name": "Satlyk Annaniyazow", "phone": "+905458833046" },
-  "15000": { "name": "Satlyk Annaniyazow", "phone": "+905458833046" }
-}
+  "15000": { "name": "Satlyk Annaniyazow", "phone": "+905458833046" },
+  "11": { "name": "Merdan", "phone": "+905019512182" },
+  "12": { "name": "Merdan", "phone": "+905019512182" },
+  "15": { "name": "Merdan", "phone": "+905019512182" },
+  "18": { "name": "Merdan", "phone": "+905019512182" },
+  "21": { "name": "Merdan", "phone": "+905019512182" },
+  "22": { "name": "Merdan", "phone": "+905019512182" },
+  }
 
 
