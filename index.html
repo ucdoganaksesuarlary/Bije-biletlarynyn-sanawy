@@ -3,369 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bilet Barla - Şansly Bilet Ulgamy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Admin Panel - Bijeli Oyun</title>
   <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --primary: #6366f1;
-      --accent-green: #10b981;
-      --accent-red: #ef4444;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding: 20px 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #a5b4fc, #6366f1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header p {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .controls-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .search-box {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .search-box input {
-      width: 100%;
-      background: #0f172a;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px 16px;
-      color: #fff;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .search-box input:focus { border-color: var(--primary); }
-
-    .filter-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-filter {
-      background: #0f172a;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-filter.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .stat-card .num { font-size: 18px; font-weight: 700; margin-top: 4px; }
-    .stat-card.all .num { color: #a5b4fc; }
-    .stat-card.sold .num { color: var(--accent-red); }
-    .stat-card.free .num { color: var(--accent-green); }
-
-    .tickets-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      min-height: 200px;
-    }
-
-    .ticket-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .ticket-card.free { border-top: 4px solid var(--accent-green); }
-    .ticket-card.sold { border-top: 4px solid var(--accent-red); background: rgba(239, 68, 68, 0.05); }
-
-    .ticket-number {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .ticket-status {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 20px;
-      display: inline-block;
-      margin-bottom: 8px;
-    }
-
-    .free .ticket-status { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
-    .sold .ticket-status { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
-
-    .owner-info {
-      font-size: 11px;
-      color: var(--text-muted);
-      border-top: 1px dashed var(--border-color);
-      padding-top: 6px;
-      text-align: left;
-    }
-
-    .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .pagination-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: 25px;
-    }
-
-    .btn-page {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn-page:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-top: 30px;
-      padding: 20px 0;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #121212; color: #fff; }
+    .card { background: #1e1e1e; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
+    input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+    button { background: #ff9900; color: #000; font-weight: bold; cursor: pointer; }
+    button:hover { background: #e68a00; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <h1>BİLET SANAW ULGAMY</h1>
-    <p>1-den 100000-e çenli biletleriň satylyş ýagdaýy</p>
-  </div>
+<div class="card">
+  <h2>Bilet Dolandyryş Paneli</h2>
+  <label>Bilet ID (1-100000):</label>
+  <input type="number" id="ticketId" placeholder="Meselem: 5">
 
-  <div class="stats-container">
-    <div class="stat-card all">
-      <div style="font-size:11px; color:var(--text-muted);">JEMI BİLET</div>
-      <div class="num" id="stat-total">100000</div>
-    </div>
-    <div class="stat-card sold">
-      <div style="font-size:11px; color:var(--text-muted);">SATYLDY</div>
-      <div class="num" id="stat-sold">0</div>
-    </div>
-    <div class="stat-card free">
-      <div style="font-size:11px; color:var(--text-muted);">BOŞ BİLET</div>
-      <div class="num" id="stat-free">100000</div>
-    </div>
-  </div>
+  <label>Status:</label>
+  <select id="status">
+    <option value="Boş">Boş</option>
+    <option value="Bilet">Bilet</option>
+  </select>
 
-  <div class="controls-card">
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Bilet belgisi ýa-da at gözle..." oninput="onSearchChange()">
-    </div>
-    <div class="filter-buttons">
-      <button class="btn-filter active" onclick="setFilter('all', this)">Ählisi</button>
-      <button class="btn-filter" onclick="setFilter('free', this)">Boş Biletler</button>
-      <button class="btn-filter" onclick="setFilter('sold', this)">Satylanlar</button>
-    </div>
-  </div>
+  <label>Ady:</label>
+  <input type="text" id="name" placeholder="Maksat">
 
-  <div class="tickets-grid" id="ticketsGrid"></div>
+  <label>Telefon Belgisi:</label>
+  <input type="text" id="phone" placeholder="+99365xxxxxx">
 
-  <div class="pagination-container">
-    <button class="btn-page" id="prevBtn" onclick="changePage(-1)">Yza</button>
-    <span id="pageInfo" style="font-size:13px; color:var(--text-muted);">Sahypa 1</span>
-    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Öňe</button>
-  </div>
-
-  <footer>
-    © 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.
-  </footer>
+  <button onclick="updateTicket()">Ýatda Sakla</button>
+  <p id="msg" style="color: #00ff00;"></p>
 </div>
 
-<script>
-  let soldTickets = {};
-  const TOTAL_TICKETS = 100000;
-  const PAGE_SIZE = 60; // Bir sahypada 60 bilet görkezilýär
-  let currentPage = 1;
-  let currentFilter = 'all';
-  let filteredList = [];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  async function fetchSoldTickets() {
-    try {
-      const response = await fetch('tickets.json?v=' + new Date().getTime());
-      if (response.ok) {
-        soldTickets = await response.json();
-      }
-    } catch (e) {
-      console.log('JSON okaýyşda ýalňyşlyk.');
-    }
-    updateStats();
-    applyFilters();
-  }
+  const firebaseConfig = {
+    apiKey: "AIzaSyBtxkqUiRNjfhiOsUnJ8B3fpsx0SRQyhZw",
+    authDomain: "bijeli-oyun.firebaseapp.com",
+    databaseURL: "https://bijeli-oyun-default-rtdb.firebaseio.com",
+    projectId: "bijeli-oyun",
+    storageBucket: "bijeli-oyun.firebasestorage.app",
+    messagingSenderId: "240710083908",
+    appId: "1:240710083908:web:4bd2306b93a6ab47fd6311"
+  };
 
-  function updateStats() {
-    const soldCount = Object.keys(soldTickets).length;
-    document.getElementById('stat-sold').innerText = soldCount;
-    document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
-  }
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-  function applyFilters() {
-    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
-    filteredList = [];
+  window.updateTicket = function() {
+    const id = document.getElementById("ticketId").value;
+    const status = document.getElementById("status").value;
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
 
-    for (let i = 1; i <= TOTAL_TICKETS; i++) {
-      const isSold = !!soldTickets[i];
-      const owner = soldTickets[i];
-
-      if (currentFilter === 'free' && isSold) continue;
-      if (currentFilter === 'sold' && !isSold) continue;
-
-      if (searchVal !== '') {
-        const numStr = i.toString();
-        const nameStr = isSold ? owner.name.toLowerCase() : '';
-        const phoneStr = isSold ? owner.phone.toLowerCase() : '';
-
-        if (!numStr.includes(searchVal) && !nameStr.includes(searchVal) && !phoneStr.includes(searchVal)) {
-          continue;
-        }
-      }
-
-      filteredList.push(i);
+    if (!id) {
+      alert("Haýyş, Bilet ID-sini ýazyň!");
+      return;
     }
 
-    currentPage = 1;
-    renderPage();
-  }
-
-  function renderPage() {
-    const grid = document.getElementById('ticketsGrid');
-    grid.innerHTML = '';
-
-    const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const pageItems = filteredList.slice(startIndex, startIndex + PAGE_SIZE);
-
-    pageItems.forEach(i => {
-      const isSold = !!soldTickets[i];
-      const owner = soldTickets[i];
-      const card = document.createElement('div');
-      card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
-
-      if (isSold) {
-        card.innerHTML = `
-          <div class="ticket-number">#${i}</div>
-          <span class="ticket-status">Satyldy</span>
-          <div class="owner-info">
-            <span>${owner.name}</span>
-            <small>${owner.phone}</small>
-          </div>
-        `;
-      } else {
-        card.innerHTML = `
-          <div class="ticket-number">#${i}</div>
-          <span class="ticket-status">Boş</span>
-          <div class="owner-info" style="border:none; text-align:center;">
-            <small style="color: var(--accent-green);">Boş Bilet</small>
-          </div>
-        `;
-      }
-      grid.appendChild(card);
+    set(ref(db, 'tickets/' + id), {
+      status: status,
+      name: name,
+      phone: phone
+    }).then(() => {
+      document.getElementById("msg").innerText = "Bilet " + id + " üstünlikli täzelendi!";
+    }).catch((error) => {
+      alert("Ýalňyşlyk: " + error.message);
     });
-
-    document.getElementById('pageInfo').innerText = `Sahypa ${currentPage} / ${totalPages}`;
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
-  }
-
-  function changePage(direction) {
-    currentPage += direction;
-    renderPage();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function setFilter(type, btn) {
-    currentFilter = type;
-    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    applyFilters();
-  }
-
-  function onSearchChange() {
-    applyFilters();
-  }
-
-  fetchSoldTickets();
+  };
 </script>
 
 </body>
