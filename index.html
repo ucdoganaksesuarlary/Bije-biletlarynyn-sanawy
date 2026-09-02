@@ -3,77 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - Bijeli Oyun</title>
+  <title>Bije Biletlarynyň Sanawy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #121212; color: #fff; }
-    .card { background: #1e1e1e; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
-    input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; box-sizing: border-box; }
-    button { background: #ff9900; color: #000; font-weight: bold; cursor: pointer; }
-    button:hover { background: #e68a00; }
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent-free: #10b981;
+      --accent-taken: #ef4444;
+      --border-color: #334155;
+    }
+
+    .light-mode {
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --border-color: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 20px; }
+
+    .top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 20px; }
+    .btn-toggle { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; color: #38bdf8; }
+    .header p { color: var(--text-sub); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.5; }
+
+    .progress-container { max-width: 600px; margin: 20px auto; background: var(--card-bg); border-radius: 20px; height: 16px; overflow: hidden; border: 1px solid var(--border-color); }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #10b981, #38bdf8); width: 0%; transition: width 0.5s ease-in-out; }
+
+    .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .input-search, .select-filter { padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 0.9rem; outline: none; }
+    .input-search { flex: 1; min-width: 200px; }
+
+    .stats-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+    .stat-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; }
+    .stat-free { color: var(--accent-free); }
+    .stat-taken { color: var(--accent-taken); }
+
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; max-width: 1100px; margin: 0 auto; }
+
+    .ticket-card {
+      background: var(--card-bg);
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .ticket-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+    .ticket-number { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+
+    .badge { display: inline-block; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 20px; text-transform: uppercase; margin-bottom: 8px; }
+    .badge-bos { background: rgba(16, 185, 129, 0.15); color: var(--accent-free); border: 1px solid var(--accent-free); }
+    .badge-bilet { background: rgba(239, 68, 68, 0.15); color: var(--accent-taken); border: 1px solid var(--accent-taken); }
+
+    .user-info { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 8px; min-height: 28px; }
+    .user-info strong { color: var(--text-main); display: block; }
+
+    .btn-wa { display: inline-block; background: #25D366; color: #fff; text-decoration: none; padding: 5px 10px; font-size: 0.75rem; font-weight: 600; border-radius: 6px; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>Bilet Dolandyryş Paneli</h2>
-  <label>Bilet ID (1-100000):</label>
-  <input type="number" id="ticketId" placeholder="Meselem: 5">
+  <div class="top-bar">
+    <button class="btn-toggle" onclick="toggleTheme()">☀️ / 🌙 Tema</button>
+    <button class="btn-toggle" onclick="toggleLang()" id="lang-btn">🇹🇲 TK / 🇹🇷 TR</button>
+  </div>
 
-  <label>Status:</label>
-  <select id="status">
-    <option value="Boş">Boş</option>
-    <option value="Bilet">Bilet</option>
-  </select>
+  <div class="header">
+    <h1 id="txt-title">Bijeli Oyunumuza Hoş Geldiňiz!</h1>
+    <p id="txt-desc">Häzirki wagtda dowam edýän bije oýnumyzyň bilet sanawy we meşgullyk ýagdaýy. Öz bagtly biletiňizi saýlap, oýna goşulyň!</p>
+  </div>
 
-  <label>Ady:</label>
-  <input type="text" id="name" placeholder="Maksat">
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
 
-  <label>Telefon Belgisi:</label>
-  <input type="text" id="phone" placeholder="+99365xxxxxx">
+  <div class="controls">
+    <input type="text" id="search-input" class="input-search" placeholder="Bilet belgisi ýa-da at gözläň..." oninput="filterTickets()">
+    <select id="filter-select" class="select-filter" onchange="filterTickets()">
+      <option value="all" id="opt-all">Ählisi</option>
+      <option value="Boş" id="opt-free">Diňe Boş</option>
+      <option value="Bilet" id="opt-taken">Diňe Alnanlar</option>
+    </select>
+  </div>
 
-  <button onclick="updateTicket()">Ýatda Sakla</button>
-  <p id="msg" style="color: #00ff00;"></p>
-</div>
+  <div class="stats-container">
+    <div class="stat-box"><span id="txt-free-lbl">Boş:</span> <span id="count-bos" class="stat-free">0</span></div>
+    <div class="stat-box"><span id="txt-taken-lbl">Alynan:</span> <span id="count-bilet" class="stat-taken">0</span></div>
+    <div class="stat-box"><span id="txt-sold-lbl">Satylan:</span> <span id="count-percent" style="color: #38bdf8;">%0</span></div>
+  </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  <div class="grid-container" id="tickets-list"></div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtxkqUiRNjfhiOsUnJ8B3fpsx0SRQyhZw",
-    authDomain: "bijeli-oyun.firebaseapp.com",
-    databaseURL: "https://bijeli-oyun-default-rtdb.firebaseio.com",
-    projectId: "bijeli-oyun",
-    storageBucket: "bijeli-oyun.firebasestorage.app",
-    messagingSenderId: "240710083908",
-    appId: "1:240710083908:web:4bd2306b93a6ab47fd6311"
-  };
+  <script>
+    let allTickets = [];
+    let currentLang = 'tk';
+    const adminPhone = "+99365000000"; // Adminiňiz üçin Telefon belgisi
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    const translations = {
+      tk: {
+        title: "Bijeli Oyunumuza Hoş Geldiňiz!",
+        desc: "Häzirki wagtda dowam edýän bije oýnumyzyň bilet sanawy we meşgullyk ýagdaýy. Öz bagtly biletiňizi saýlap, oýna goşulyň!",
+        search: "Bilet belgisi ýa-da at gözläň...",
+        all: "Ählisi",
+        free: "Diňe Boş",
+        taken: "Diňe Alnanlar",
+        freeLbl: "Boş:",
+        takenLbl: "Alynan:",
+        soldLbl: "Satylan:",
+        available: "Elýeterli",
+        buyWa: "Shaty Al"
+      },
+      tr: {
+        title: "Çekiliş Oyunumuza Hoş Geldiniz!",
+        desc: "Şu anda devam eden çekilişimizin bilet listesi ve doluluk durumu. Şanslı biletinizi seçin ve oyuna katılın!",
+        search: "Bilet numarası veya isim arayın...",
+        all: "Hepsi",
+        free: "Sadece Boş",
+        taken: "Sadece Alınanlar",
+        freeLbl: "Boş:",
+        takenLbl: "Alınan:",
+        soldLbl: "Satılan:",
+        available: "Uygur / Boş",
+        buyWa: "Satın Al"
+      }
+    };
 
-  window.updateTicket = function() {
-    const id = document.getElementById("ticketId").value;
-    const status = document.getElementById("status").value;
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-
-    if (!id) {
-      alert("Haýyş, Bilet ID-sini ýazyň!");
-      return;
+    async function loadTickets() {
+      try {
+        const response = await fetch('tickets.json');
+        allTickets = await response.json();
+        renderTickets(allTickets);
+      } catch (error) {
+        console.error("tickets.json ýükläp bolmady:", error);
+      }
     }
 
-    set(ref(db, 'tickets/' + id), {
-      status: status,
-      name: name,
-      phone: phone
-    }).then(() => {
-      document.getElementById("msg").innerText = "Bilet " + id + " üstünlikli täzelendi!";
-    }).catch((error) => {
-      alert("Ýalňyşlyk: " + error.message);
-    });
-  };
-</script>
+    function renderTickets(data) {
+      const container = document.getElementById('tickets-list');
+      container.innerHTML = '';
 
+      let bosCount = 0;
+      let biletCount = 0;
+      const t = translations[currentLang];
+
+      data.forEach(item => {
+        if (item.status === 'Boş') bosCount++;
+        if (item.status === 'Bilet') biletCount++;
+
+        const isTaken = item.status === 'Bilet';
+        const badgeClass = isTaken ? 'badge-bilet' : 'badge-bos';
+        const waMsg = encodeURIComponent(`Salam, men #${item.id} belgili bileti almak isleýärin.`);
+
+        const card = document.createElement('div');
+        card.className = 'ticket-card';
+        card.innerHTML = `
+          <div class="ticket-number">#${item.id}</div>
+          <div class="badge ${badgeClass}">${isTaken ? (currentLang==='tk'?'Bilet':'Dolu') : (currentLang==='tk'?'Boş':'Boş')}</div>
+          <div class="user-info">
+            ${isTaken ? `<strong>${item.name || ''}</strong>${item.phone || ''}` : t.available}
+          </div>
+          ${!isTaken ? `<a href="https://wa.me/${adminPhone}?text=${waMsg}" target="_blank" class="btn-wa">${t.buyWa}</a>` : ''}
+        `;
+        container.appendChild(card);
+      });
+
+      const total = data.length || 1;
+      const percent = Math.round((biletCount / total) * 100);
+
+      document.getElementById('count-bos').innerText = bosCount;
+      document.getElementById('count-bilet').innerText = biletCount;
+      document.getElementById('count-percent').innerText = `%${percent}`;
+      document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function filterTickets() {
+      const searchValue = document.getElementById('search-input').value.toLowerCase();
+      const filterValue = document.getElementById('filter-select').value;
+
+      const filtered = allTickets.filter(item => {
+        const matchesSearch = item.id.toString().includes(searchValue) || (item.name && item.name.toLowerCase().includes(searchValue));
+        const matchesFilter = filterValue === 'all' || item.status === filterValue;
+        return matchesSearch && matchesFilter;
+      });
+
+      renderTickets(filtered);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'tk' ? 'tr' : 'tk';
+      const t = translations[currentLang];
+
+      document.getElementById('txt-title').innerText = t.title;
+      document.getElementById('txt-desc').innerText = t.desc;
+      document.getElementById('search-input').placeholder = t.search;
+      document.getElementById('opt-all').innerText = t.all;
+      document.getElementById('opt-free').innerText = t.free;
+      document.getElementById('opt-taken').innerText = t.taken;
+      document.getElementById('txt-free-lbl').innerText = t.freeLbl;
+      document.getElementById('txt-taken-lbl').innerText = t.takenLbl;
+      document.getElementById('txt-sold-lbl').innerText = t.soldLbl;
+
+      renderTickets(allTickets);
+    }
+
+    loadTickets();
+  </script>
 </body>
 </html>
