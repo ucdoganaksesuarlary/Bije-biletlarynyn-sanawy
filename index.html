@@ -3,338 +3,370 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bije Biletlarynyň Sanawy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Bilet Barla - Şansly Bilet Ulgamy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-color: #0f172a;
       --card-bg: #1e293b;
+      --primary: #6366f1;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
       --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --accent-free: #10b981;
-      --accent-taken: #ef4444;
+      --text-muted: #94a3b8;
       --border-color: #334155;
     }
 
-    .light-mode {
-      --bg-color: #f1f5f9;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-sub: #64748b;
-      --border-color: #cbd5e1;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 20px; }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
 
-    .top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 20px; }
-    .btn-toggle { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-    .header { text-align: center; margin-bottom: 25px; }
-    .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; color: #38bdf8; }
-    .header p { color: var(--text-sub); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.5; }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a5b4fc, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-    .progress-container { max-width: 600px; margin: 20px auto; background: var(--card-bg); border-radius: 20px; height: 16px; overflow: hidden; border: 1px solid var(--border-color); }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, #10b981, #38bdf8); width: 0%; transition: width 0.5s ease-in-out; }
+    .header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 5px;
+    }
 
-    .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; max-width: 800px; margin-left: auto; margin-right: auto; }
-    .input-search, .select-filter { padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 0.9rem; outline: none; }
-    .input-search { flex: 1; min-width: 200px; }
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    .stats-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
-    .stat-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; }
-    .stat-free { color: var(--accent-free); }
-    .stat-taken { color: var(--accent-taken); }
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+    }
 
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; max-width: 1100px; margin: 0 auto; }
+    .search-box input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-box input:focus { border-color: var(--primary); }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-filter {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-filter.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-card .num { font-size: 18px; font-weight: 700; margin-top: 4px; }
+    .stat-card.all .num { color: #a5b4fc; }
+    .stat-card.sold .num { color: var(--accent-red); }
+    .stat-card.free .num { color: var(--accent-green); }
+
+    .tickets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      min-height: 200px;
+    }
 
     .ticket-card {
       background: var(--card-bg);
-      border: 2px dashed var(--border-color);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 15px;
+      padding: 12px;
       text-align: center;
-      position: relative;
     }
 
-    .ticket-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
-    .ticket-number { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+    .ticket-card.free { border-top: 4px solid var(--accent-green); }
+    .ticket-card.sold { border-top: 4px solid var(--accent-red); background: rgba(239, 68, 68, 0.05); }
 
-    .badge { display: inline-block; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 20px; text-transform: uppercase; margin-bottom: 8px; }
-    .badge-bos { background: rgba(16, 185, 129, 0.15); color: var(--accent-free); border: 1px solid var(--accent-free); }
-    .badge-bilet { background: rgba(239, 68, 68, 0.15); color: var(--accent-taken); border: 1px solid var(--accent-taken); }
+    .ticket-number {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-    .user-info { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 8px; min-height: 28px; }
-    .user-info strong { color: var(--text-main); display: block; }
+    .ticket-status {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
 
-    .btn-wa { display: inline-block; background: #25D366; color: #fff; text-decoration: none; padding: 5px 10px; font-size: 0.75rem; font-weight: 600; border-radius: 6px; }
+    .free .ticket-status { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+    .sold .ticket-status { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+
+    .owner-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 6px;
+      text-align: left;
+    }
+
+    .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn-page {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-page:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: 30px;
+      padding: 20px 0;
+    }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <button class="btn-toggle" onclick="toggleTheme()">☀️ / 🌙 Tema</button>
-    <button class="btn-toggle" onclick="toggleLang()" id="lang-btn">🇹🇲 TK / 🇹🇷 TR</button>
-  </div>
-
+<div class="container">
   <div class="header">
-    <h1 id="txt-title">Bijeli Oyunumuza Hoş Geldiňiz!</h1>
-    <p id="txt-desc">Häzirki wagtda dowam edýän bije oýnumyzyň bilet sanawy we meşgullyk ýagdaýy. Öz bagtly biletiňizi saýlap, oýna goşulyň!</p>
-  </div>
-
-  <div class="progress-container">
-    <div class="progress-bar" id="progress-bar"></div>
-  </div>
-
-  <div class="controls">
-    <input type="text" id="search-input" class="input-search" placeholder="Bilet belgisi ýa-da at gözläň..." oninput="filterTickets()">
-    <select id="filter-select" class="select-filter" onchange="filterTickets()">
-      <option value="all" id="opt-all">Ählisi</option>
-      <option value="Boş" id="opt-free">Diňe Boş</option>
-      <option value="Bilet" id="opt-taken">Diňe Alnanlar</option>
-    </select>
+    <h1>BİLET SANAW ULGAMY</h1>
+    <p>1-den 100000-e çenli biletleriň satylyş ýagdaýy</p>
   </div>
 
   <div class="stats-container">
-    <div class="stat-box"><span id="txt-free-lbl">Boş:</span> <span id="count-bos" class="stat-free">0</span></div>
-    <div class="stat-box"><span id="txt-taken-lbl">Alynan:</span> <span id="count-bilet" class="stat-taken">0</span></div>
-    <div class="stat-box"><span id="txt-sold-lbl">Satylan:</span> <span id="count-percent" style="color: #38bdf8;">%0</span></div>
+    <div class="stat-card all">
+      <div style="font-size:11px; color:var(--text-muted);">JEMI BİLET</div>
+      <div class="num" id="stat-total">100000</div>
+    </div>
+    <div class="stat-card sold">
+      <div style="font-size:11px; color:var(--text-muted);">SATYLDY</div>
+      <div class="num" id="stat-sold">0</div>
+    </div>
+    <div class="stat-card free">
+      <div style="font-size:11px; color:var(--text-muted);">BOŞ BİLET</div>
+      <div class="num" id="stat-free">100000</div>
+    </div>
   </div>
 
-  <div class="grid-container" id="tickets-list"></div>
+  <div class="controls-card">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Bilet belgisi ýa-da at gözle..." oninput="onSearchChange()">
+    </div>
+    <div class="filter-buttons">
+      <button class="btn-filter active" onclick="setFilter('all', this)">Ählisi</button>
+      <button class="btn-filter" onclick="setFilter('free', this)">Boş Biletler</button>
+      <button class="btn-filter" onclick="setFilter('sold', this)">Satylanlar</button>
+    </div>
+  </div>
 
-  <script>
-    const TOTAL_TICKETS = 100000;
-    const adminPhone = "+905458833046";
-    let currentLang = 'tk';
+  <div class="tickets-grid" id="ticketsGrid"></div>
 
-    // Satylan biletlerňiz
-    const soldData = {
-      "1": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "2": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "3": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "4": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "5": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "6": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "7": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "8": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "9": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "10": { "name": "Merdan", "phone": "+985019512182" },
-      "11": { "name": "Merdan", "phone": "+985019512182" },
-      "12": { "name": "Merdan", "phone": "+985019512182" },
-      "13": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "14": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "15": { "name": "Merdan", "phone": "+985019512182" },
-      "16": { "name": "Maksat", "phone": "05013309626" },
-      "17": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "18": { "name": "Merdan", "phone": "+985019512182" },
-      "19": { "name": "Merdan", "phone": "+985019512182" },
-      "20": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "21": { "name": "Merdan", "phone": "+985019512182" },
-      "22": { "name": "Merdan", "phone": "+985019512182" },
-      "23": { "name": "Bayhan", "phone": "+905348843876" },
-      "24": { "name": "Maksat", "phone": "05013309626" },
-      "25": { "name": "Maksat", "phone": "05013309626" },
-      "26": { "name": "Maksat", "phone": "05013309626" },
-      "27": { "name": "Han Dusakow", "phone": "05520045451" },
-      "28": { "name": "Maksat", "phone": "05013309626" },
-      "29": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "30": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "31": { "name": "Maksat", "phone": "05013309626" },
-      "32": { "name": "Maksat", "phone": "05013309626" },
-      "33": { "name": "Alijan Yusupow", "phone": "5319467619" },
-      "34": { "name": "Bayhan", "phone": "+905348843876" },
-      "35": { "name": "Maksat", "phone": "05013309626" },
-      "36": { "name": "Maksat", "phone": "05013309626" },
-      "37": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "38": { "name": "Maksat", "phone": "05013309626" },
-      "39": { "name": "Maksat", "phone": "05013309626" },
-      "40": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "41": { "name": "Bayhan", "phone": "+905348843876" },
-      "42": { "name": "Maksat", "phone": "05013309626" },
-      "43": { "name": "Maksat", "phone": "05013309626" },
-      "44": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "45": { "name": "Maksat", "phone": "05013309626" },
-      "46": { "name": "Maksat", "phone": "05013309626" },
-      "47": { "name": "Nazli", "phone": "+905052638771" },
-      "48": { "name": "Maksat", "phone": "05013309626" },
-      "49": { "name": "Maksat", "phone": "05013309626" },
-      "50": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "51": { "name": "Bayhan", "phone": "+905348843876" },
-      "52": { "name": "Maksat", "phone": "05013309626" },
-      "53": { "name": "Maksat", "phone": "05013309626" },
-      "54": { "name": "Maksat", "phone": "05013309626" },
-      "55": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "56": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "57": { "name": "Agajan", "phone": "+905052638771" },
-      "58": { "name": "Maksat", "phone": "05013309626" },
-      "59": { "name": "Bayhan", "phone": "+905348843876" },
-      "60": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "61": { "name": "Maksat", "phone": "05013309626" },
-      "62": { "name": "Maksat", "phone": "05013309626" },
-      "63": { "name": "Bayhan", "phone": "+905348843876" },
-      "64": { "name": "Maksat", "phone": "05013309626" },
-      "65": { "name": "Bayhan", "phone": "+905348843876" },
-      "66": { "name": "Maksat", "phone": "05013309626" },
-      "67": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "68": { "name": "Maksat", "phone": "05013309626" },
-      "69": { "name": "Maksat", "phone": "05013309626" },
-      "70": { "name": "Maksat", "phone": "05013309626" },
-      "71": { "name": "Maksat", "phone": "05013309626" },
-      "72": { "name": "Bayhan", "phone": "+905348843876" },
-      "73": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "74": { "name": "Maksat", "phone": "05013309626" },
-      "75": { "name": "Maksat", "phone": "05013309626" },
-      "76": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "77": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "78": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "79": { "name": "Maksat", "phone": "05013309626" },
-      "80": { "name": "Maksat", "phone": "05013309626" },
-      "81": { "name": "Bayhan", "phone": "+905348843876" },
-      "82": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "83": { "name": "Maksat", "phone": "05013309626" },
-      "84": { "name": "Bayhan", "phone": "+905348843876" },
-      "85": { "name": "Maksat", "phone": "05013309626" },
-      "86": { "name": "Maksat", "phone": "05013309626" },
-      "87": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "88": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "89": { "name": "Bayhan", "phone": "+905348843876" },
-      "90": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "91": { "name": "Maksat", "phone": "05013309626" },
-      "92": { "name": "Bayhan", "phone": "+905348843876" },
-      "93": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "94": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "95": { "name": "Maksat", "phone": "05013309626" },
-      "96": { "name": "Bayhan", "phone": "+905348843876" },
-      "97": { "name": "Maksat", "phone": "05013309626" },
-      "98": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "99": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "100": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "101": { "name": "Maksat", "phone": "05013309626" },
-      "102": { "name": "Maksat", "phone": "05013309626" },
-      "103": { "name": "Bayhan", "phone": "+905348843876" },
-      "104": { "name": "Maksat", "phone": "05013309626" },
-      "105": { "name": "Maksat", "phone": "05013309626" },
-      "106": { "name": "Maksat", "phone": "05013309626" },
-      "107": { "name": "Maksat", "phone": "05013309626" },
-      "108": { "name": "Maksat", "phone": "05013309626" },
-      "109": { "name": "Maksat", "phone": "05013309626" },
-      "110": { "name": "Maksat", "phone": "05013309626" },
-      "111": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "112": { "name": "Bayhan", "phone": "+905348843876" },
-      "113": { "name": "Maksat", "phone": "05013309626" },
-      "114": { "name": "Maksat", "phone": "05013309626" },
-      "115": { "name": "Maksat", "phone": "05013309626" },
-      "116": { "name": "Maksat", "phone": "05013309626" },
-      "117": { "name": "Maksat", "phone": "05013309626" },
-      "118": { "name": "Maksat", "phone": "05013309626" },
-      "119": { "name": "Maksat", "phone": "05013309626" },
-      "120": { "name": "Maksat", "phone": "05013309626" },
-      "121": { "name": "Maksat", "phone": "05013309626" },
-      "122": { "name": "Maksat", "phone": "05013309626" },
-      "123": { "name": "Maksat", "phone": "05013309626" },
-      "125": { "name": "Maksat", "phone": "05013309626" },
-      "126": { "name": "Maksat", "phone": "05013309626" },
-      "127": { "name": "Han Dusakow", "phone": "05520045451" },
-      "128": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "129": { "name": "Maksat", "phone": "05013309626" },
-      "130": { "name": "Maksat", "phone": "05013309626" },
-      "131": { "name": "Maksat", "phone": "05013309626" },
-      "132": { "name": "Maksat", "phone": "05013309626" },
-      "133": { "name": "Bayhan", "phone": "+905348843876" },
-      "134": { "name": "Maksat", "phone": "05013309626" },
-      "135": { "name": "Maksat", "phone": "05013309626" },
-      "136": { "name": "Maksat", "phone": "05013309626" },
-      "137": { "name": "Maksat", "phone": "05013309626" },
-      "138": { "name": "Maksat", "phone": "05013309626" },
-      "139": { "name": "Maksat", "phone": "05013309626" },
-      "140": { "name": "Maksat", "phone": "05013309626" },
-      "141": { "name": "Bayhan", "phone": "+905348843876" },
-      "142": { "name": "Maksat", "phone": "05013309626" },
-      "143": { "name": "Maksat", "phone": "05013309626" },
-      "144": { "name": "Maksat", "phone": "05013309626" },
-      "145": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "146": { "name": "Maksat", "phone": "05013309626" },
-      "147": { "name": "Maksat", "phone": "05013309626" },
-      "149": { "name": "Maksat", "phone": "05013309626" },
-      "150": { "name": "Maksat", "phone": "05013309626" },
-      "151": { "name": "Maksat", "phone": "05013309626" },
-      "152": { "name": "Maksat", "phone": "05013309626" },
-      "153": { "name": "Maksat", "phone": "05013309626" },
-      "154": { "name": "Maksat", "phone": "05013309626" },
-      "155": { "name": "Maksat", "phone": "05013309626" },
-      "156": { "name": "Maksat", "phone": "05013309626" },
-      "157": { "name": "Maksat", "phone": "05013309626" },
-      "158": { "name": "Maksat", "phone": "05013309626" },
-      "159": { "name": "Bayhan", "phone": "+905348843876" },
-      "160": { "name": "Maksat", "phone": "05013309626" },
-      "161": { "name": "Maksat", "phone": "05013309626" },
-      "162": { "name": "Maksat", "phone": "05013309626" },
-      "163": { "name": "Bayhan", "phone": "+905348843876" },
-      "164": { "name": "Maksat", "phone": "05013309626" },
-      "165": { "name": "Maksat", "phone": "05013309626" },
-      "166": { "name": "Maksat", "phone": "05013309626" },
-      "167": { "name": "Maksat", "phone": "05013309626" },
-      "168": { "name": "Maksat", "phone": "05013309626" },
-      "169": { "name": "Maksat", "phone": "05013309626" },
-      "170": { "name": "Maksat", "phone": "05013309626" },
-      "171": { "name": "Maksat", "phone": "05013309626" },
-      "172": { "name": "Bayhan", "phone": "+905348843876" },
-      "174": { "name": "Maksat", "phone": "05013309626" },
-      "175": { "name": "Maksat", "phone": "05013309626" },
-      "184": { "name": "Bayhan", "phone": "+905348843876" },
-      "185": { "name": "Serdar", "phone": "+905514726418" },
-      "188": { "name": "Garyagdyyew Isa", "phone": "+99363099735" },
-      "191": { "name": "Raşid Abdurimow", "phone": "+905016969455" },
-      "194": { "name": "Murad Rustemow", "phone": "+99362011136" },
-      "196": { "name": "Murad Rustemow", "phone": "+99362011136" },
-      "200": { "name": "Serdar", "phone": "+905514726418" },
-      "201": { "name": "Bayhan", "phone": "+905348843876" },
-      "202": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "203": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "204": { "name": "Bayhan", "phone": "+905348843876" },
-      "205": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "206": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "207": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "208": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "209": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "210": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "211": { "name": "Bayhan", "phone": "+905348843876" },
-      "212": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "213": { "name": "Han Dusakow", "phone": "05520045451" },
-      "214": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "215": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "216": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "217": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "218": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "219": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "220": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "221": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "222": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
-      "223": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "224": { "name": "Bayhan", "phone": "+905348843876" },
-      "225": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "226": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "227": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "228": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "229": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "230": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "231": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "232": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "233": { "name": "Bayhan", "phone": "+905348843876" },
-      "234": { "name": "Bayhan", "phone": "+905348843876" },
-      "235": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "236": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "237": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "238": { "name": "Bayhan", "phone": "+905348843876" },
-      "239": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "240": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "241": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "242": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "243": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "244": { "name": "Bayhan", "phone": "+905348843876" },
-      "245": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "246": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "248": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "249": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
-      "250": { "name":
+  <div class="pagination-container">
+    <button class="btn-page" id="prevBtn" onclick="changePage(-1)">Yza</button>
+    <span id="pageInfo" style="font-size:13px; color:var(--text-muted);">Sahypa 1</span>
+    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Öňe</button>
+  </div>
+
+  <footer>
+    © 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.
+  </footer>
+</div>
+
+<script>
+  let soldTickets = {};
+  const TOTAL_TICKETS = 100000;
+  const PAGE_SIZE = 60; // Bir sahypada 60 bilet görkezilýär
+  let currentPage = 1;
+  let currentFilter = 'all';
+  let filteredList = [];
+
+  async function fetchSoldTickets() {
+    try {
+      const response = await fetch('tickets.json?v=' + new Date().getTime());
+      if (response.ok) {
+        soldTickets = await response.json();
+      }
+    } catch (e) {
+      console.log('JSON okaýyşda ýalňyşlyk.');
+    }
+    updateStats();
+    applyFilters();
+  }
+
+  function updateStats() {
+    const soldCount = Object.keys(soldTickets).length;
+    document.getElementById('stat-sold').innerText = soldCount;
+    document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
+  }
+
+  function applyFilters() {
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    filteredList = [];
+
+    for (let i = 1; i <= TOTAL_TICKETS; i++) {
+      const isSold = !!soldTickets[i];
+      const owner = soldTickets[i];
+
+      if (currentFilter === 'free' && isSold) continue;
+      if (currentFilter === 'sold' && !isSold) continue;
+
+      if (searchVal !== '') {
+        const numStr = i.toString();
+        const nameStr = isSold ? owner.name.toLowerCase() : '';
+        const phoneStr = isSold ? owner.phone.toLowerCase() : '';
+
+        if (!numStr.includes(searchVal) && !nameStr.includes(searchVal) && !phoneStr.includes(searchVal)) {
+          continue;
+        }
+      }
+
+      filteredList.push(i);
+    }
+
+    currentPage = 1;
+    renderPage();
+  }
+
+  function renderPage() {
+    const grid = document.getElementById('ticketsGrid');
+    grid.innerHTML = '';
+
+    const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filteredList.slice(startIndex, startIndex + PAGE_SIZE);
+
+    pageItems.forEach(i => {
+      const isSold = !!soldTickets[i];
+      const owner = soldTickets[i];
+      const card = document.createElement('div');
+      card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
+
+      if (isSold) {
+        card.innerHTML = `
+          <div class="ticket-number">#${i}</div>
+          <span class="ticket-status">Satyldy</span>
+          <div class="owner-info">
+            <span>${owner.name}</span>
+            <small>${owner.phone}</small>
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="ticket-number">#${i}</div>
+          <span class="ticket-status">Boş</span>
+          <div class="owner-info" style="border:none; text-align:center;">
+            <small style="color: var(--accent-green);">Boş Bilet</small>
+          </div>
+        `;
+      }
+      grid.appendChild(card);
+    });
+
+    document.getElementById('pageInfo').innerText = `Sahypa ${currentPage} / ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+  }
+
+  function changePage(direction) {
+    currentPage += direction;
+    renderPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setFilter(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function onSearchChange() {
+    applyFilters();
+  }
+
+  fetchSoldTickets();
+</script>
+
+</body>
+</html>
