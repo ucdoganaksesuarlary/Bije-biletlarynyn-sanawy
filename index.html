@@ -55,7 +55,6 @@
       padding: 15px;
       text-align: center;
       position: relative;
-      animation: fadeIn 0.4s ease-in-out;
     }
 
     .ticket-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
@@ -69,11 +68,6 @@
     .user-info strong { color: var(--text-main); display: block; }
 
     .btn-wa { display: inline-block; background: #25D366; color: #fff; text-decoration: none; padding: 5px 10px; font-size: 0.75rem; font-weight: 600; border-radius: 6px; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
@@ -110,122 +104,237 @@
   <div class="grid-container" id="tickets-list"></div>
 
   <script>
-    let allTickets = [];
+    const TOTAL_TICKETS = 100000;
+    const adminPhone = "+905458833046";
     let currentLang = 'tk';
-    const adminPhone = "+99365000000"; // Adminiňiz üçin Telefon belgisi
 
-    const translations = {
-      tk: {
-        title: "Bijeli Oyunumuza Hoş Geldiňiz!",
-        desc: "Häzirki wagtda dowam edýän bije oýnumyzyň bilet sanawy we meşgullyk ýagdaýy. Öz bagtly biletiňizi saýlap, oýna goşulyň!",
-        search: "Bilet belgisi ýa-da at gözläň...",
-        all: "Ählisi",
-        free: "Diňe Boş",
-        taken: "Diňe Alnanlar",
-        freeLbl: "Boş:",
-        takenLbl: "Alynan:",
-        soldLbl: "Satylan:",
-        available: "Elýeterli",
-        buyWa: "Shaty Al"
-      },
-      tr: {
-        title: "Çekiliş Oyunumuza Hoş Geldiniz!",
-        desc: "Şu anda devam eden çekilişimizin bilet listesi ve doluluk durumu. Şanslı biletinizi seçin ve oyuna katılın!",
-        search: "Bilet numarası veya isim arayın...",
-        all: "Hepsi",
-        free: "Sadece Boş",
-        taken: "Sadece Alınanlar",
-        freeLbl: "Boş:",
-        takenLbl: "Alınan:",
-        soldLbl: "Satılan:",
-        available: "Uygur / Boş",
-        buyWa: "Satın Al"
-      }
-    };
-
-    async function loadTickets() {
-      try {
-        const response = await fetch('tickets.json');
-        allTickets = await response.json();
-        renderTickets(allTickets);
-      } catch (error) {
-        console.error("tickets.json ýükläp bolmady:", error);
-      }
-    }
-
-    function renderTickets(data) {
-      const container = document.getElementById('tickets-list');
-      container.innerHTML = '';
-
-      let bosCount = 0;
-      let biletCount = 0;
-      const t = translations[currentLang];
-
-      data.forEach(item => {
-        if (item.status === 'Boş') bosCount++;
-        if (item.status === 'Bilet') biletCount++;
-
-        const isTaken = item.status === 'Bilet';
-        const badgeClass = isTaken ? 'badge-bilet' : 'badge-bos';
-        const waMsg = encodeURIComponent(`Salam, men #${item.id} belgili bileti almak isleýärin.`);
-
-        const card = document.createElement('div');
-        card.className = 'ticket-card';
-        card.innerHTML = `
-          <div class="ticket-number">#${item.id}</div>
-          <div class="badge ${badgeClass}">${isTaken ? (currentLang==='tk'?'Bilet':'Dolu') : (currentLang==='tk'?'Boş':'Boş')}</div>
-          <div class="user-info">
-            ${isTaken ? `<strong>${item.name || ''}</strong>${item.phone || ''}` : t.available}
-          </div>
-          ${!isTaken ? `<a href="https://wa.me/${adminPhone}?text=${waMsg}" target="_blank" class="btn-wa">${t.buyWa}</a>` : ''}
-        `;
-        container.appendChild(card);
-      });
-
-      const total = data.length || 1;
-      const percent = Math.round((biletCount / total) * 100);
-
-      document.getElementById('count-bos').innerText = bosCount;
-      document.getElementById('count-bilet').innerText = biletCount;
-      document.getElementById('count-percent').innerText = `%${percent}`;
-      document.getElementById('progress-bar').style.width = `${percent}%`;
-    }
-
-    function filterTickets() {
-      const searchValue = document.getElementById('search-input').value.toLowerCase();
-      const filterValue = document.getElementById('filter-select').value;
-
-      const filtered = allTickets.filter(item => {
-        const matchesSearch = item.id.toString().includes(searchValue) || (item.name && item.name.toLowerCase().includes(searchValue));
-        const matchesFilter = filterValue === 'all' || item.status === filterValue;
-        return matchesSearch && matchesFilter;
-      });
-
-      renderTickets(filtered);
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-    }
-
-    function toggleLang() {
-      currentLang = currentLang === 'tk' ? 'tr' : 'tk';
-      const t = translations[currentLang];
-
-      document.getElementById('txt-title').innerText = t.title;
-      document.getElementById('txt-desc').innerText = t.desc;
-      document.getElementById('search-input').placeholder = t.search;
-      document.getElementById('opt-all').innerText = t.all;
-      document.getElementById('opt-free').innerText = t.free;
-      document.getElementById('opt-taken').innerText = t.taken;
-      document.getElementById('txt-free-lbl').innerText = t.freeLbl;
-      document.getElementById('txt-taken-lbl').innerText = t.takenLbl;
-      document.getElementById('txt-sold-lbl').innerText = t.soldLbl;
-
-      renderTickets(allTickets);
-    }
-
-    loadTickets();
-  </script>
-</body>
-</html>
+    // Satylan biletlerňiz
+    const soldData = {
+      "1": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "2": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "3": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "4": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "5": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "6": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "7": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "8": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "9": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "10": { "name": "Merdan", "phone": "+985019512182" },
+      "11": { "name": "Merdan", "phone": "+985019512182" },
+      "12": { "name": "Merdan", "phone": "+985019512182" },
+      "13": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "14": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "15": { "name": "Merdan", "phone": "+985019512182" },
+      "16": { "name": "Maksat", "phone": "05013309626" },
+      "17": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "18": { "name": "Merdan", "phone": "+985019512182" },
+      "19": { "name": "Merdan", "phone": "+985019512182" },
+      "20": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "21": { "name": "Merdan", "phone": "+985019512182" },
+      "22": { "name": "Merdan", "phone": "+985019512182" },
+      "23": { "name": "Bayhan", "phone": "+905348843876" },
+      "24": { "name": "Maksat", "phone": "05013309626" },
+      "25": { "name": "Maksat", "phone": "05013309626" },
+      "26": { "name": "Maksat", "phone": "05013309626" },
+      "27": { "name": "Han Dusakow", "phone": "05520045451" },
+      "28": { "name": "Maksat", "phone": "05013309626" },
+      "29": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "30": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "31": { "name": "Maksat", "phone": "05013309626" },
+      "32": { "name": "Maksat", "phone": "05013309626" },
+      "33": { "name": "Alijan Yusupow", "phone": "5319467619" },
+      "34": { "name": "Bayhan", "phone": "+905348843876" },
+      "35": { "name": "Maksat", "phone": "05013309626" },
+      "36": { "name": "Maksat", "phone": "05013309626" },
+      "37": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "38": { "name": "Maksat", "phone": "05013309626" },
+      "39": { "name": "Maksat", "phone": "05013309626" },
+      "40": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "41": { "name": "Bayhan", "phone": "+905348843876" },
+      "42": { "name": "Maksat", "phone": "05013309626" },
+      "43": { "name": "Maksat", "phone": "05013309626" },
+      "44": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "45": { "name": "Maksat", "phone": "05013309626" },
+      "46": { "name": "Maksat", "phone": "05013309626" },
+      "47": { "name": "Nazli", "phone": "+905052638771" },
+      "48": { "name": "Maksat", "phone": "05013309626" },
+      "49": { "name": "Maksat", "phone": "05013309626" },
+      "50": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "51": { "name": "Bayhan", "phone": "+905348843876" },
+      "52": { "name": "Maksat", "phone": "05013309626" },
+      "53": { "name": "Maksat", "phone": "05013309626" },
+      "54": { "name": "Maksat", "phone": "05013309626" },
+      "55": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "56": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "57": { "name": "Agajan", "phone": "+905052638771" },
+      "58": { "name": "Maksat", "phone": "05013309626" },
+      "59": { "name": "Bayhan", "phone": "+905348843876" },
+      "60": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "61": { "name": "Maksat", "phone": "05013309626" },
+      "62": { "name": "Maksat", "phone": "05013309626" },
+      "63": { "name": "Bayhan", "phone": "+905348843876" },
+      "64": { "name": "Maksat", "phone": "05013309626" },
+      "65": { "name": "Bayhan", "phone": "+905348843876" },
+      "66": { "name": "Maksat", "phone": "05013309626" },
+      "67": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "68": { "name": "Maksat", "phone": "05013309626" },
+      "69": { "name": "Maksat", "phone": "05013309626" },
+      "70": { "name": "Maksat", "phone": "05013309626" },
+      "71": { "name": "Maksat", "phone": "05013309626" },
+      "72": { "name": "Bayhan", "phone": "+905348843876" },
+      "73": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "74": { "name": "Maksat", "phone": "05013309626" },
+      "75": { "name": "Maksat", "phone": "05013309626" },
+      "76": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "77": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "78": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "79": { "name": "Maksat", "phone": "05013309626" },
+      "80": { "name": "Maksat", "phone": "05013309626" },
+      "81": { "name": "Bayhan", "phone": "+905348843876" },
+      "82": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "83": { "name": "Maksat", "phone": "05013309626" },
+      "84": { "name": "Bayhan", "phone": "+905348843876" },
+      "85": { "name": "Maksat", "phone": "05013309626" },
+      "86": { "name": "Maksat", "phone": "05013309626" },
+      "87": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "88": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "89": { "name": "Bayhan", "phone": "+905348843876" },
+      "90": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "91": { "name": "Maksat", "phone": "05013309626" },
+      "92": { "name": "Bayhan", "phone": "+905348843876" },
+      "93": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "94": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "95": { "name": "Maksat", "phone": "05013309626" },
+      "96": { "name": "Bayhan", "phone": "+905348843876" },
+      "97": { "name": "Maksat", "phone": "05013309626" },
+      "98": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "99": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "100": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "101": { "name": "Maksat", "phone": "05013309626" },
+      "102": { "name": "Maksat", "phone": "05013309626" },
+      "103": { "name": "Bayhan", "phone": "+905348843876" },
+      "104": { "name": "Maksat", "phone": "05013309626" },
+      "105": { "name": "Maksat", "phone": "05013309626" },
+      "106": { "name": "Maksat", "phone": "05013309626" },
+      "107": { "name": "Maksat", "phone": "05013309626" },
+      "108": { "name": "Maksat", "phone": "05013309626" },
+      "109": { "name": "Maksat", "phone": "05013309626" },
+      "110": { "name": "Maksat", "phone": "05013309626" },
+      "111": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "112": { "name": "Bayhan", "phone": "+905348843876" },
+      "113": { "name": "Maksat", "phone": "05013309626" },
+      "114": { "name": "Maksat", "phone": "05013309626" },
+      "115": { "name": "Maksat", "phone": "05013309626" },
+      "116": { "name": "Maksat", "phone": "05013309626" },
+      "117": { "name": "Maksat", "phone": "05013309626" },
+      "118": { "name": "Maksat", "phone": "05013309626" },
+      "119": { "name": "Maksat", "phone": "05013309626" },
+      "120": { "name": "Maksat", "phone": "05013309626" },
+      "121": { "name": "Maksat", "phone": "05013309626" },
+      "122": { "name": "Maksat", "phone": "05013309626" },
+      "123": { "name": "Maksat", "phone": "05013309626" },
+      "125": { "name": "Maksat", "phone": "05013309626" },
+      "126": { "name": "Maksat", "phone": "05013309626" },
+      "127": { "name": "Han Dusakow", "phone": "05520045451" },
+      "128": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "129": { "name": "Maksat", "phone": "05013309626" },
+      "130": { "name": "Maksat", "phone": "05013309626" },
+      "131": { "name": "Maksat", "phone": "05013309626" },
+      "132": { "name": "Maksat", "phone": "05013309626" },
+      "133": { "name": "Bayhan", "phone": "+905348843876" },
+      "134": { "name": "Maksat", "phone": "05013309626" },
+      "135": { "name": "Maksat", "phone": "05013309626" },
+      "136": { "name": "Maksat", "phone": "05013309626" },
+      "137": { "name": "Maksat", "phone": "05013309626" },
+      "138": { "name": "Maksat", "phone": "05013309626" },
+      "139": { "name": "Maksat", "phone": "05013309626" },
+      "140": { "name": "Maksat", "phone": "05013309626" },
+      "141": { "name": "Bayhan", "phone": "+905348843876" },
+      "142": { "name": "Maksat", "phone": "05013309626" },
+      "143": { "name": "Maksat", "phone": "05013309626" },
+      "144": { "name": "Maksat", "phone": "05013309626" },
+      "145": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "146": { "name": "Maksat", "phone": "05013309626" },
+      "147": { "name": "Maksat", "phone": "05013309626" },
+      "149": { "name": "Maksat", "phone": "05013309626" },
+      "150": { "name": "Maksat", "phone": "05013309626" },
+      "151": { "name": "Maksat", "phone": "05013309626" },
+      "152": { "name": "Maksat", "phone": "05013309626" },
+      "153": { "name": "Maksat", "phone": "05013309626" },
+      "154": { "name": "Maksat", "phone": "05013309626" },
+      "155": { "name": "Maksat", "phone": "05013309626" },
+      "156": { "name": "Maksat", "phone": "05013309626" },
+      "157": { "name": "Maksat", "phone": "05013309626" },
+      "158": { "name": "Maksat", "phone": "05013309626" },
+      "159": { "name": "Bayhan", "phone": "+905348843876" },
+      "160": { "name": "Maksat", "phone": "05013309626" },
+      "161": { "name": "Maksat", "phone": "05013309626" },
+      "162": { "name": "Maksat", "phone": "05013309626" },
+      "163": { "name": "Bayhan", "phone": "+905348843876" },
+      "164": { "name": "Maksat", "phone": "05013309626" },
+      "165": { "name": "Maksat", "phone": "05013309626" },
+      "166": { "name": "Maksat", "phone": "05013309626" },
+      "167": { "name": "Maksat", "phone": "05013309626" },
+      "168": { "name": "Maksat", "phone": "05013309626" },
+      "169": { "name": "Maksat", "phone": "05013309626" },
+      "170": { "name": "Maksat", "phone": "05013309626" },
+      "171": { "name": "Maksat", "phone": "05013309626" },
+      "172": { "name": "Bayhan", "phone": "+905348843876" },
+      "174": { "name": "Maksat", "phone": "05013309626" },
+      "175": { "name": "Maksat", "phone": "05013309626" },
+      "184": { "name": "Bayhan", "phone": "+905348843876" },
+      "185": { "name": "Serdar", "phone": "+905514726418" },
+      "188": { "name": "Garyagdyyew Isa", "phone": "+99363099735" },
+      "191": { "name": "Raşid Abdurimow", "phone": "+905016969455" },
+      "194": { "name": "Murad Rustemow", "phone": "+99362011136" },
+      "196": { "name": "Murad Rustemow", "phone": "+99362011136" },
+      "200": { "name": "Serdar", "phone": "+905514726418" },
+      "201": { "name": "Bayhan", "phone": "+905348843876" },
+      "202": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "203": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "204": { "name": "Bayhan", "phone": "+905348843876" },
+      "205": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "206": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "207": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "208": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "209": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "210": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "211": { "name": "Bayhan", "phone": "+905348843876" },
+      "212": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "213": { "name": "Han Dusakow", "phone": "05520045451" },
+      "214": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "215": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "216": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "217": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "218": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "219": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "220": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "221": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "222": { "name": "Ýaşyguly Bazarow", "phone": "+905458833046" },
+      "223": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "224": { "name": "Bayhan", "phone": "+905348843876" },
+      "225": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "226": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "227": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "228": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "229": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "230": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "231": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "232": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "233": { "name": "Bayhan", "phone": "+905348843876" },
+      "234": { "name": "Bayhan", "phone": "+905348843876" },
+      "235": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "236": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "237": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "238": { "name": "Bayhan", "phone": "+905348843876" },
+      "239": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "240": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "241": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "242": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "243": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "244": { "name": "Bayhan", "phone": "+905348843876" },
+      "245": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "246": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "248": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "249": { "name": "Ulugbek Matmuradow", "phone": "+905015174957" },
+      "250": { "name":
