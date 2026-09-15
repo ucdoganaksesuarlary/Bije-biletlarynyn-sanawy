@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bilet Barla - Şansly Bilet Ulgamy</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: rgba(22, 31, 49, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: rgba(255, 255, 255, 0.1);
       --primary: #6366f1;
+      --primary-hover: #4f46e5;
       --accent-green: #10b981;
       --accent-red: #f43f5e;
       --text-main: #f8fafc;
@@ -18,10 +20,11 @@
     }
 
     body.light-mode {
-      --bg-color: #f1f5f9;
-      --card-bg: rgba(255, 255, 255, 0.85);
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
       --card-border: rgba(0, 0, 0, 0.08);
       --primary: #4f46e5;
+      --primary-hover: #4338ca;
       --accent-green: #059669;
       --accent-red: #e11d48;
       --text-main: #0f172a;
@@ -34,118 +37,197 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 20px 15px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding-bottom: 90px;
     }
 
-    .container { width: 100%; max-width: 950px; }
+    .container { width: 100%; max-width: 900px; }
 
+    /* Top Marquee Bar */
     .marquee-container {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; overflow: hidden; white-space: nowrap;
-      margin-bottom: 15px; padding: 8px 0; display: flex; align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     .marquee-label {
-      background: var(--primary); color: #fff; padding: 4px 10px;
-      font-size: 11px; font-weight: 800; border-radius: 8px; margin: 0 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-    .marquee-content { display: inline-block; animation: marquee 25s linear infinite; font-size: 13px; font-weight: 700; }
-    .marquee-item { margin-right: 30px; color: var(--accent-green); }
+    .marquee-wrapper { overflow: hidden; width: 100%; }
+    .marquee-content { display: inline-block; animation: marquee 20s linear infinite; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .marquee-item { margin-right: 25px; color: var(--accent-green); }
 
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-    .theme-toggle, .lang-select, .btn-action {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-main); padding: 8px 14px; border-radius: 12px;
-      font-weight: 600; font-size: 13px; cursor: pointer;
+    /* Controls Header */
+    .top-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    @media(min-width: 600px) { .top-bar { grid-template-columns: repeat(4, 1fr); } }
+
+    .btn-action, .lang-select {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      transition: all 0.2s;
     }
+    .btn-action:hover { background: var(--primary); color: #fff; }
 
+    /* Banner */
     .welcome-banner {
-      background: rgba(99, 102, 241, 0.15); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 22px; text-align: center; margin-bottom: 25px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
     }
-    .welcome-banner h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
-    .welcome-banner p { font-size: 14px; color: var(--text-muted); }
+    .welcome-banner h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
+    .welcome-banner p { font-size: 13px; color: var(--text-muted); }
 
     .header { text-align: center; margin-bottom: 20px; }
-    .header h1 { font-size: 28px; font-weight: 800; }
+    .header h1 { font-size: 24px; font-weight: 800; letter-spacing: 0.5px; }
+    .header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
-    .progress-wrapper { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin-bottom: 20px; }
-    .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
-    .progress-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 10px; overflow: hidden; }
+    /* Progress Bar */
+    .progress-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+    .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar-bg { background: rgba(0,0,0,0.2); height: 10px; border-radius: 10px; overflow: hidden; }
     .progress-bar-fill { background: linear-gradient(90deg, var(--primary), var(--accent-green)); height: 100%; width: 0%; transition: width 0.5s ease; }
 
-    .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; text-align: center; }
-    .stat-card .num { font-size: 22px; font-weight: 800; margin-top: 6px; }
+    /* Stats Cards */
+    .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 8px;
+      text-align: center;
+    }
+    .stat-card .title { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+    .stat-card .num { font-size: 18px; font-weight: 800; margin-top: 4px; }
 
+    /* Search & Filters */
     .controls-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 16px 20px; margin-bottom: 25px;
-      display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .search-box { flex: 1; min-width: 200px; }
     .search-box input {
-      width: 100%; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 12px 18px; color: var(--text-main); font-size: 14px; outline: none;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
     }
-
-    .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .btn-filter {
-      background: rgba(0, 0, 0, 0.15); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer;
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
     }
     .btn-filter.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 14px; min-height: 200px; }
+    /* Tickets Grid */
+    .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; min-height: 150px; }
     .ticket-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 16px; padding: 14px; text-align: center; cursor: pointer;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.1s;
     }
+    .ticket-card:active { transform: scale(0.97); }
     .ticket-card.free { border-top: 3px solid var(--accent-green); }
     .ticket-card.sold { border-top: 3px solid var(--accent-red); }
 
-    .ticket-number { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-    .ticket-status { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+    .ticket-number { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+    .ticket-status { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
     .free .ticket-status { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
     .sold .ticket-status { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); }
 
-    .owner-info { font-size: 11px; color: var(--text-muted); border-top: 1px dashed var(--card-border); padding-top: 8px; text-align: left; }
-    .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .owner-info { font-size: 10px; color: var(--text-muted); border-top: 1px dashed var(--card-border); padding-top: 6px; }
+    .owner-info span { display: block; color: var(--text-main); font-weight: 700; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+    /* Modal */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.75); display: flex; justify-content: center; align-items: center;
-      opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 1000;
+      background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 2000; padding: 15px;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-content {
-      background: var(--bg-color); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 25px; width: 90%; max-width: 450px; text-align: center;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; text-align: center;
     }
-    .modal-tickets-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 15px 0; max-height: 150px; overflow-y: auto; }
-    .modal-ticket-badge { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+    .modal-tickets-list { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 15px 0; max-height: 120px; overflow-y: auto; }
+    .modal-ticket-badge { background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
 
-    .pagination-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 35px; flex-wrap: wrap; }
+    /* Pagination */
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; gap: 8px; }
     .btn-page {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-main); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600;
+      color: var(--text-main); padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 12px;
     }
     .btn-page:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    .jump-input {
-      width: 70px; background: rgba(0,0,0,0.15); border: 1px solid var(--card-border);
-      border-radius: 8px; color: var(--text-main); text-align: center; padding: 8px; font-weight: 600;
-    }
-
+    /* WhatsApp Button Fixed */
     .whatsapp-btn {
       position: fixed; bottom: 20px; right: 20px;
-      background: #25d366; color: #fff; padding: 12px 18px; border-radius: 50px;
-      text-decoration: none; font-weight: 700; font-size: 13px; z-index: 900;
+      background: #25d366; color: #fff;
+      padding: 12px 18px; border-radius: 50px;
+      text-decoration: none; font-weight: 800; font-size: 13px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      display: flex; align-items: center; gap: 8px; z-index: 1000;
     }
 
-    footer { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 40px; padding: 20px 0; }
+    footer { text-align: center; color: var(--text-muted); font-size: 11px; margin-top: 30px; }
 
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
   </style>
@@ -155,14 +237,16 @@
 <div class="container">
   
   <div class="marquee-container">
-    <div class="marquee-label">TOP 10</div>
-    <div class="marquee-content" id="top10Marquee">Ýüklenýär...</div>
+    <div class="marquee-label"><i class="fa-solid => fa-trophy"></i> TOP 10</div>
+    <div class="marquee-wrapper">
+      <div class="marquee-content" id="top10Marquee">Maglumat ýüklenýär...</div>
+    </div>
   </div>
   
   <div class="top-bar">
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️ Mode</button>
-    <button class="btn-action" onclick="pickRandomTicket()">🎲 <span id="txt-random">Şansly Bilet</span></button>
-    <button class="btn-action" onclick="window.print()">🖨️ PDF / Print</button>
+    <button class="btn-action" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i> Mode</button>
+    <button class="btn-action" onclick="pickRandomTicket()"><i class="fa-solid fa-dice"></i> <span id="txt-random">Şansly</span></button>
+    <button class="btn-action" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
     <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
       <option value="tk">Türkmençe</option>
       <option value="ru">Русский</option>
@@ -191,16 +275,16 @@
   </div>
 
   <div class="stats-container">
-    <div class="stat-card all">
-      <div style="font-size:11px; color:var(--text-muted); font-weight: 600;" id="txt-stat-total">JEMI BİLET</div>
+    <div class="stat-card">
+      <div class="title" id="txt-stat-total">JEMI BİLET</div>
       <div class="num" id="stat-total" style="color:var(--primary);">100000</div>
     </div>
-    <div class="stat-card sold">
-      <div style="font-size:11px; color:var(--text-muted); font-weight: 600;" id="txt-stat-sold">SATYLDY</div>
+    <div class="stat-card">
+      <div class="title" id="txt-stat-sold">SATYLDY</div>
       <div class="num" id="stat-sold" style="color:var(--accent-red);">0</div>
     </div>
-    <div class="stat-card free">
-      <div style="font-size:11px; color:var(--text-muted); font-weight: 600;" id="txt-stat-free">BOŞ BİLET</div>
+    <div class="stat-card">
+      <div class="title" id="txt-stat-free">BOŞ BİLET</div>
       <div class="num" id="stat-free" style="color:var(--accent-green);">100000</div>
     </div>
   </div>
@@ -211,7 +295,7 @@
     </div>
     <div class="filter-buttons">
       <button class="btn-filter active" id="btn-all" onclick="setFilter('all', this)">Ählisi</button>
-      <button class="btn-filter" id="btn-free" onclick="setFilter('free', this)">Boş Biletler</button>
+      <button class="btn-filter" id="btn-free" onclick="setFilter('free', this)">Boş</button>
       <button class="btn-filter" id="btn-sold" onclick="setFilter('sold', this)">Satylanlar</button>
     </div>
   </div>
@@ -220,8 +304,7 @@
 
   <div class="pagination-container">
     <button class="btn-page" id="prevBtn" onclick="changePage(-1)">Yza</button>
-    <span id="pageInfo" style="font-size:13px; color:var(--text-muted); font-weight: 600;">Sahypa 1</span>
-    <input type="number" class="jump-input" id="jumpPageInput" placeholder="Nomer" onchange="jumpToPage(this.value)">
+    <span id="pageInfo" style="font-size:12px; color:var(--text-muted); font-weight: 700;">Sahypa 1</span>
     <button class="btn-page" id="nextBtn" onclick="changePage(1)">Öňe</button>
   </div>
 
@@ -230,23 +313,32 @@
   </footer>
 </div>
 
-<a href="https://wa.me/905523904832" target="_blank" class="whatsapp-btn">💬 Arz & Şikaýat</a>
+<a href="https://wa.me/905523904832" target="_blank" class="whatsapp-btn">
+  <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Arz & Şikaýat
+</a>
 
 <div class="modal-overlay" id="userModal">
   <div class="modal-content">
     <h3 id="modalUserName" style="margin-bottom: 5px;">Aday</h3>
     <p id="modalUserPhone" style="color: var(--text-muted); font-size: 13px;"></p>
-    <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 15px 0;">
-    <p style="font-size: 13px; font-weight: 600;" id="txt-modal-tickets">Satyn alnan jemi biletler:</p>
+    <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 12px 0;">
+    <p style="font-size: 12px; font-weight: 700;" id="txt-modal-tickets">Satyn alnan biletler:</p>
     <div class="modal-tickets-list" id="modalTicketsList"></div>
-    <button class="btn-page" onclick="closeModal()" style="margin-top: 10px; width: 100%;">Ýapmak</button>
+    <button class="btn-page" onclick="closeModal()" style="width: 100%; margin-top: 5px;">Ýapmak</button>
   </div>
 </div>
 
 <script>
-  let soldTickets = {};
+  // Demo maglumatlar (tickets.json tapylmasa awtomatiki görkeziler)
+  let soldTickets = {
+    "12": { "name": "Aman H.", "phone": "+99365000000" },
+    "15": { "name": "Aman H.", "phone": "+99365000000" },
+    "104": { "name": "Meredov B.", "phone": "+99364112233" },
+    "500": { "name": "Sähet R.", "phone": "+99363998877" }
+  };
+
   const TOTAL_TICKETS = 100000;
-  const PAGE_SIZE = 60;
+  const PAGE_SIZE = 48;
   let currentPage = 1;
   let currentFilter = 'all';
   let filteredList = [];
@@ -256,9 +348,9 @@
       welTitle: "Hoş geldiňiz! 🎲", welDesc: "Bu Administration - Aşakdaky sanawdan öz biletleriňizi barlap bilersiňiz.",
       title: "BİLET SANAW ULGAMY", subtitle: "1-den 100000-e çenli biletleriň satylyş ýagdaýy",
       statTotal: "JEMI BİLET", statSold: "SATYLDY", statFree: "BOŞ BİLET",
-      searchPlaceholder: "Bilet belgisi ýa-da at gözle...", btnAll: "Ählisi", btnFree: "Boş Biletler", btnSold: "Satylanlar",
+      searchPlaceholder: "Bilet belgisi ýa-da at gözle...", btnAll: "Ählisi", btnFree: "Boş", btnSold: "Satylanlar",
       statusSold: "Satyldy", statusFree: "Boş", freeCard: "Boş Bilet", prev: "Yza", next: "Öňe", page: "Sahypa",
-      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.", randomBtn: "Şansly Bilet", progressLabel: "Satylyş Derejesi", modalTickets: "Satyn alnan jemi biletler:"
+      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.", randomBtn: "Şansly", progressLabel: "Satylyş Derejesi", modalTickets: "Satyn alnan biletler:"
     },
     ru: {
       welTitle: "Добро пожаловать! 🎲", welDesc: "Bu Administration - В списке ниже вы можете удобно проверить свои билеты.",
@@ -266,7 +358,7 @@
       statTotal: "ВСЕГО БИЛЕТОВ", statSold: "ПРОДАНО", statFree: "СВОБОДНО",
       searchPlaceholder: "Поиск по номеру или имени...", btnAll: "Все", btnFree: "Свободные", btnSold: "Проданные",
       statusSold: "Продано", statusFree: "Свободно", freeCard: "Свободный билет", prev: "Назад", next: "Вперед", page: "Страница",
-      footer: "© 2026 Система Лотерейных Билетов. Все права защищены.", randomBtn: "Случайный билет", progressLabel: "Прогресс продаж", modalTickets: "Все купленные билеты:"
+      footer: "© 2026 Система Лотерейных Билетов. Все права защищены.", randomBtn: "Случайный", progressLabel: "Прогресс продаж", modalTickets: "Купленные билеты:"
     },
     en: {
       welTitle: "Welcome! 🎲", welDesc: "Bu Administration - You can conveniently check your tickets.",
@@ -274,7 +366,7 @@
       statTotal: "TOTAL TICKETS", statSold: "SOLD", statFree: "AVAILABLE",
       searchPlaceholder: "Search by ticket number or name...", btnAll: "All", btnFree: "Available", btnSold: "Sold",
       statusSold: "Sold", statusFree: "Free", freeCard: "Available Ticket", prev: "Prev", next: "Next", page: "Page",
-      footer: "© 2026 Lucky Ticket System. All rights reserved.", randomBtn: "Lucky Ticket", progressLabel: "Sales Progress", modalTickets: "All purchased tickets:"
+      footer: "© 2026 Lucky Ticket System. All rights reserved.", randomBtn: "Lucky", progressLabel: "Sales Progress", modalTickets: "Purchased tickets:"
     }
   };
 
@@ -308,8 +400,12 @@
   async function fetchSoldTickets() {
     try {
       const response = await fetch('tickets.json?v=' + new Date().getTime());
-      if (response.ok) soldTickets = await response.json();
-    } catch (e) {}
+      if (response.ok) {
+        soldTickets = await response.json();
+      }
+    } catch (e) {
+      console.log('JSON ýüklenmedi, demo maglumat ulanylýar');
+    }
     updateStats();
     calculateTop10();
     applyFilters();
@@ -318,7 +414,7 @@
   function updateStats() {
     const soldCount = Object.keys(soldTickets).length;
     document.getElementById('stat-sold').innerText = soldCount;
-    document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
+    document.getElementById('stat-free').innerText = (TOTAL_TICKETS - soldCount).toLocaleString();
     const percent = ((soldCount / TOTAL_TICKETS) * 100).toFixed(2);
     document.getElementById('progressBar').style.width = percent + '%';
     document.getElementById('progress-text').innerText = percent + '%';
@@ -340,17 +436,21 @@
   function applyFilters() {
     const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
     filteredList = [];
+    
     for (let i = 1; i <= TOTAL_TICKETS; i++) {
       const isSold = !!soldTickets[i];
       const owner = soldTickets[i];
+
       if (currentFilter === 'free' && isSold) continue;
       if (currentFilter === 'sold' && !isSold) continue;
+
       if (searchVal !== '') {
         const numStr = i.toString();
         const nameStr = isSold ? owner.name.toLowerCase() : '';
         const phoneStr = isSold ? owner.phone.toLowerCase() : '';
         if (!numStr.includes(searchVal) && !nameStr.includes(searchVal) && !phoneStr.includes(searchVal)) continue;
       }
+
       filteredList.push(i);
     }
     currentPage = 1;
@@ -372,9 +472,9 @@
       card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
       if (isSold) {
         card.onclick = () => showUserModal(owner.name, owner.phone);
-        card.innerHTML = `<div class="ticket-number">#${i}</div><span class="ticket-status">${t.statusSold}</span><div class="owner-info"><span>${owner.name}</span><small>${owner.phone}</small></div>`;
+        card.innerHTML = `<div class="ticket-number">#${i}</div><span class="ticket-status">${t.statusSold}</span><div class="owner-info"><span>${owner.name}</span></div>`;
       } else {
-        card.innerHTML = `<div class="ticket-number">#${i}</div><span class="ticket-status">${t.statusFree}</span><div class="owner-info" style="border:none; text-align:center;"><small style="color: var(--accent-green);">${t.freeCard}</small></div>`;
+        card.innerHTML = `<div class="ticket-number">#${i}</div><span class="ticket-status">${t.statusFree}</span><div class="owner-info" style="border:none;"><small style="color: var(--accent-green);">${t.freeCard}</small></div>`;
       }
       grid.appendChild(card);
     });
@@ -384,16 +484,15 @@
     document.getElementById('nextBtn').disabled = currentPage >= totalPages;
   }
 
-  function changePage(direction) { currentPage += direction; renderPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function jumpToPage(val) {
-    const page = parseInt(val);
-    const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
-    if (page >= 1 && page <= totalPages) { currentPage = page; renderPage(); }
+  function changePage(direction) {
+    currentPage += direction;
+    renderPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function pickRandomTicket() {
     const freeTickets = [];
-    for (let i = 1; i <= TOTAL_TICKETS; i++) { if (!soldTickets[i]) freeTickets.push(i); }
+    for (let i = 1; i <= 5000; i++) { if (!soldTickets[i]) freeTickets.push(i); }
     if (freeTickets.length > 0) {
       const randomTicket = freeTickets[Math.floor(Math.random() * freeTickets.length)];
       document.getElementById('searchInput').value = randomTicket;
@@ -409,4 +508,21 @@
       if (info.phone === phone) userTickets.push(`#${id}`);
     }
     document.getElementById('modalTicketsList').innerHTML = userTickets.map(t => `<span class="modal-ticket-badge">${t}</span>`).join('');
-    document.getElementById('userModal').classList.add
+    document.getElementById('userModal').classList.add('active');
+  }
+
+  function closeModal() { document.getElementById('userModal').classList.remove('active'); }
+
+  function setFilter(type, btn) {
+    currentFilter = type;
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function onSearchChange() { applyFilters(); }
+
+  fetchSoldTickets();
+</script>
+</body>
+</html>  
