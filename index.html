@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
+      --bg-color: #090d16;
+      --card-bg: #121824;
       --card-border: rgba(255, 255, 255, 0.08);
       --primary: #6366f1;
       --accent-green: #10b981;
@@ -44,6 +44,31 @@
 
     .container { width: 100%; max-width: 900px; }
 
+    /* Admin Online Bar */
+    .admin-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: 20px;
+      padding: 6px 14px;
+      margin-bottom: 15px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--accent-red);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-red);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-red);
+      animation: pulse 1.5s infinite;
+    }
+
     /* Top Marquee Bar */
     .marquee-container {
       background: var(--card-bg);
@@ -55,7 +80,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
     .marquee-label {
       background: linear-gradient(135deg, #eab308, #ca8a04);
@@ -72,7 +97,7 @@
     .marquee-wrapper { overflow: hidden; width: 100%; }
     .marquee-content { 
       display: inline-block; 
-      animation: marquee 45s linear infinite; /* Tizligi haýalladyldy (45s) */
+      animation: marquee 18s linear infinite; /* Tizligi düzeltildi (çalt geçýär) */
       font-size: 13px; 
       font-weight: 700; 
       white-space: nowrap; 
@@ -101,7 +126,7 @@
     }
     .btn-action:hover { background: var(--primary); color: #fff; }
 
-    /* Owadan Welcome Banner */
+    /* Welcome Banner */
     .welcome-banner {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.08));
       border: 1px solid var(--card-border);
@@ -153,7 +178,7 @@
     }
     .search-box input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--card-border);
       border-radius: 10px;
       padding: 12px 14px;
@@ -163,7 +188,7 @@
     }
     .filter-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .btn-filter {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
       padding: 10px;
@@ -175,18 +200,25 @@
     }
     .btn-filter.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* Tickets Grid */
-    .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; min-height: 150px; }
+    /* 3D Ticket Cards Grid */
+    .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; min-height: 150px; perspective: 1000px; }
+    
     .ticket-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 14px 12px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.1s;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+      position: relative;
     }
-    .ticket-card:active { transform: scale(0.97); }
+    .ticket-card:hover {
+      transform: translateY(-5px) rotateX(10deg) rotateY(10deg);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+    .ticket-card:active { transform: scale(0.95); }
     .ticket-card.free { border-top: 3px solid var(--accent-green); }
     .ticket-card.sold { border-top: 3px solid var(--accent-red); }
 
@@ -201,7 +233,7 @@
     /* Modal */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center;
+      background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center;
       opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 2000; padding: 15px;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
@@ -233,11 +265,17 @@
     footer { text-align: center; color: var(--text-muted); font-size: 11px; margin-top: 30px; }
 
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
   </style>
 </head>
 <body>
 
 <div class="container">
+
+  <div class="admin-status-bar">
+    <div class="status-dot"></div>
+    <span>ADMIN ONLINE</span>
+  </div>
   
   <div class="marquee-container">
     <div class="marquee-label"><i class="fa-solid fa-trophy"></i> TOP 10</div>
@@ -415,7 +453,6 @@
     const marqueeDiv = document.getElementById('top10Marquee');
     if (sorted.length === 0) { marqueeDiv.innerHTML = "Entek bilet satylmady."; return; }
     
-    /* Diňe Ady we Familýasy görkezilýär (bilet sany aýryldy) */
     marqueeDiv.innerHTML = sorted.map((item, index) => 
       `<span class="marquee-item">🏆 #${index + 1} ${item[0]}</span>`
     ).join(' ');
@@ -494,8 +531,7 @@
     const userTickets = [];
     for (const [id, info] of Object.entries(soldTickets)) {
       if (info.phone === phone) userTickets.push(`#${id}`);
-
-   }
+    }
     document.getElementById('modalTicketsList').innerHTML = userTickets.map(t => `<span class="modal-ticket-badge">${t}</span>`).join('');
     document.getElementById('userModal').classList.add('active');
   }
@@ -514,4 +550,4 @@
   fetchSoldTickets();
 </script>
 </body>
-</html>
+</html> 
