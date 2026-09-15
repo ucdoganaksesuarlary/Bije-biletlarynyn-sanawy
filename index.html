@@ -19,7 +19,6 @@
       --banner-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
     }
 
-    /* GÜNDİZKİ TEMA (LIGHT MODE) */
     body.light-mode {
       --bg-color: #f1f5f9;
       --card-bg: rgba(255, 255, 255, 0.85);
@@ -45,171 +44,135 @@
       align-items: center;
     }
 
+    /* 2.3 SEKUNTLYK GARŞYLAMA EKRANY (SPLASH SCREEN) */
+    .splash-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0b0f19; z-index: 9999;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 20px;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .splash-overlay.hidden { opacity: 0; visibility: hidden; }
+    .splash-title {
+      font-size: 26px; font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #a855f7, #10b981);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: pulse 1.5s infinite; margin-bottom: 10px;
+    }
+    .splash-sub { color: #94a3b8; font-size: 14px; font-weight: 600; }
+
     .container { width: 100%; max-width: 950px; }
 
-    /* YÖKARY DOLANDYRYŞ PANAL (DİL WE TEMA) */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    /* TOP-10 EKRANDAN GEÇÝÄN LENTA (MARQUEE) */
+    .marquee-container {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; overflow: hidden; white-space: nowrap;
+      margin-bottom: 15px; padding: 8px 0; display: flex; align-items: center;
     }
-
-    .theme-toggle, .lang-select {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
+    .marquee-label {
+      background: var(--primary); color: #fff; padding: 4px 10px;
+      font-size: 11px; font-weight: 800; border-radius: 8px; margin: 0 10px; flex-shrink: 0;
     }
+    .marquee-content {
+      display: inline-block; animation: marquee 25s linear infinite; font-size: 13px; font-weight: 700;
+    }
+    .marquee-item { margin-right: 30px; color: var(--accent-green); text-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
 
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .theme-toggle, .lang-select, .btn-action {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      color: var(--text-main); padding: 8px 14px; border-radius: 12px;
+      font-weight: 600; font-size: 13px; cursor: pointer; backdrop-filter: blur(10px);
+    }
     .lang-select option { background: var(--bg-color); color: var(--text-main); }
 
-    /* HOŞ GELDİŇİZ BANNERI (ANIMASIÝALY) */
     .welcome-banner {
-      background: var(--banner-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 22px;
-      text-align: center;
-      margin-bottom: 25px;
-      animation: fadeInDown 0.8s ease-out;
+      background: var(--banner-bg); border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px); border-radius: 20px; padding: 22px;
+      text-align: center; margin-bottom: 25px; animation: fadeInDown 0.8s ease-out;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
-
     .welcome-banner h2 {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 6px;
+      font-size: 22px; font-weight: 800; margin-bottom: 6px;
       background: linear-gradient(135deg, var(--primary), #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-
     .welcome-banner p { font-size: 14px; color: var(--text-muted); }
 
-    .header { text-align: center; margin-bottom: 25px; }
+    .header { text-align: center; margin-bottom: 20px; }
     .header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
 
-    /* STATS CONTAINER */
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+    .progress-wrapper { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin-bottom: 20px; }
+    .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+    .progress-bar-bg { background: rgba(0,0,0,0.2); height: 8px; border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { background: linear-gradient(90deg, var(--primary), var(--accent-green)); height: 100%; width: 0%; transition: width 0.5s ease; }
 
+    .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
     .stat-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      animation: zoomIn 0.5s ease;
+      background: var(--card-bg); backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border); border-radius: 16px; padding: 16px;
+      text-align: center; position: relative; overflow: hidden; animation: zoomIn 0.5s ease;
     }
-
     .stat-card .num { font-size: 22px; font-weight: 800; margin-top: 6px; }
 
-    /* CONTROLS CARD */
     .controls-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px 20px;
-      margin-bottom: 25px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--card-bg); backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border); border-radius: 20px; padding: 16px 20px;
+      margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px;
+      justify-content: space-between; align-items: center;
     }
-
-    .search-box { flex: 1; min-width: 260px; }
+    .search-box { flex: 1; min-width: 200px; }
     .search-box input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.15);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 18px;
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
+      width: 100%; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 12px 18px; color: var(--text-main); font-size: 14px; outline: none;
     }
-
     .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-    .filter-buttons { display: flex; gap: 8px; }
+    .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn-filter {
-      background: rgba(0, 0, 0, 0.15);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
+      background: rgba(0, 0, 0, 0.15); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 10px 18px; border-radius: 12px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
     }
+    .btn-filter.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-glow); }
 
-    .btn-filter.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 4px 15px var(--primary-glow);
-    }
-
-    /* TICKETS GRID */
-    .tickets-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-      gap: 14px;
-      min-height: 200px;
-    }
-
+    .tickets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 14px; min-height: 200px; }
     .ticket-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 14px;
-      text-align: center;
-      position: relative;
-      animation: fadeInUp 0.4s ease-out;
+      background: var(--card-bg); backdrop-filter: blur(8px);
+      border: 1px solid var(--card-border); border-radius: 16px; padding: 14px;
+      text-align: center; position: relative; cursor: pointer; animation: fadeInUp 0.4s ease-out;
     }
-
-    .ticket-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 10px 20px var(--primary-glow);
-    }
-
+    .ticket-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 20px var(--primary-glow); }
     .ticket-card.free { border-top: 3px solid var(--accent-green); }
     .ticket-card.sold { border-top: 3px solid var(--accent-red); }
 
     .ticket-number { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-    .ticket-status {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px;
-    }
-
+    .ticket-status { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
     .free .ticket-status { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
     .sold .ticket-status { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); }
 
-    .owner-info {
-      font-size: 11px; color: var(--text-muted);
-      border-top: 1px dashed var(--card-border); padding-top: 8px; text-align: left;
-    }
+    .owner-info { font-size: 11px; color: var(--text-muted); border-top: 1px dashed var(--card-border); padding-top: 8px; text-align: left; }
     .owner-info span { display: block; color: var(--text-main); font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* PAGINATION */
-    .pagination-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 35px; }
+    /* MODAL PENJIRE */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px);
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 1000;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      background: var(--bg-color); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 25px; width: 90%; max-width: 450px;
+      text-align: center; transform: translateY(20px); transition: all 0.3s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    .modal-tickets-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 15px 0; max-height: 150px; overflow-y: auto; }
+    .modal-ticket-badge { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+
+    .pagination-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 35px; flex-wrap: wrap; }
     .btn-page {
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-main); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600;
@@ -217,21 +180,59 @@
     .btn-page:hover:not(:disabled) { background: var(--primary); color: #fff; }
     .btn-page:disabled { opacity: 0.3; cursor: not-allowed; }
 
+    .jump-input {
+      width: 70px; background: rgba(0,0,0,0.15); border: 1px solid var(--card-border);
+      border-radius: 8px; color: var(--text-main); text-align: center; padding: 8px; font-weight: 600;
+    }
+
+    /* WHATSAPP FLOAT BUTTON */
+    .whatsapp-btn {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #25d366; color: #fff; padding: 12px 18px; border-radius: 50px;
+      text-decoration: none; font-weight: 700; font-size: 13px;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); display: flex; align-items: center; gap: 8px; z-index: 900;
+      transition: transform 0.2s;
+    }
+    .whatsapp-btn:hover { transform: scale(1.05); }
+
     footer { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 40px; padding: 20px 0; }
 
-    /* ANIMASIÝALAR */
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
     @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    /* PRINT STYLES */
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .top-bar, .welcome-banner, .controls-card, .pagination-container, .whatsapp-btn, .theme-toggle, .marquee-container, .splash-overlay { display: none !important; }
+      .ticket-card { border: 1px solid #000 !important; color: #000 !important; page-break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
 
+<!-- 2.3 SEKUNTLYK GARŞYLAMA EKRANY -->
+<div class="splash-overlay" id="splashScreen">
+  <div class="splash-title">Bijeli oyunumyza hoş geldiňiz!</div>
+  <div class="splash-sub">Bu Administration</div>
+</div>
+
 <div class="container">
   
-  <!-- YÖKARY DİL WE TEMA PANAL -->
+  <!-- EKRANDAN GEÇÝÄN TOP-10 LENTASY -->
+  <div class="marquee-container">
+    <div class="marquee-label">TOP 10</div>
+    <div class="marquee-content" id="top10Marquee">
+      Ýüklenýär...
+    </div>
+  </div>
+  
   <div class="top-bar">
     <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️ Mode</button>
+    <button class="btn-action" onclick="pickRandomTicket()">🎲 <span id="txt-random">Şansly Bilet</span></button>
+    <button class="btn-action" onclick="window.print()">🖨️ PDF / Print</button>
     <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
       <option value="tk">Türkmençe</option>
       <option value="ru">Русский</option>
@@ -239,7 +240,6 @@
     </select>
   </div>
 
-  <!-- HOŞ GELDİŇİZ BANNERI -->
   <div class="welcome-banner">
     <h2 id="wel-title">Hoş geldiňiz! 🎲</h2>
     <p id="wel-desc">Aşakdaky sanawdan öz biletleriňizi we satylyş ýagdaýyny amatlylyk bilen barlap bilersiňiz.</p>
@@ -248,6 +248,16 @@
   <div class="header">
     <h1 id="txt-title">BİLET SANAW ULGAMY</h1>
     <p id="txt-subtitle">1-den 100000-e çenli biletleriň satylyş ýagdaýy</p>
+  </div>
+
+  <div class="progress-wrapper">
+    <div class="progress-info">
+      <span id="txt-progress-label">Satylyş Derejesi</span>
+      <span id="progress-text">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
   </div>
 
   <div class="stats-container">
@@ -281,6 +291,7 @@
   <div class="pagination-container">
     <button class="btn-page" id="prevBtn" onclick="changePage(-1)">Yza</button>
     <span id="pageInfo" style="font-size:13px; color:var(--text-muted); font-weight: 600;">Sahypa 1</span>
+    <input type="number" class="jump-input" id="jumpPageInput" placeholder="Nomer" onchange="jumpToPage(this.value)">
     <button class="btn-page" id="nextBtn" onclick="changePage(1)">Öňe</button>
   </div>
 
@@ -289,7 +300,30 @@
   </footer>
 </div>
 
+<!-- WHATSAPP ARZ WE ŞİKAÝAT GUTUSY -->
+<a href="https://wa.me/905523904832" target="_blank" class="whatsapp-btn">
+  💬 Arz & Şikaýat
+</a>
+
+<!-- TOPAR MODAL PENJİRESI -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal-content">
+    <h3 id="modalUserName" style="margin-bottom: 5px;">Aday</h3>
+    <p id="modalUserPhone" style="color: var(--text-muted); font-size: 13px;"></p>
+    <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 15px 0;">
+    <p style="font-size: 13px; font-weight: 600;" id="txt-modal-tickets">Satyn alnan jemi biletler:</p>
+    <div class="modal-tickets-list" id="modalTicketsList"></div>
+    <button class="btn-page" onclick="closeModal()" style="margin-top: 10px; width: 100%;">Ýapmak</button>
+  </div>
+</div>
+
 <script>
+  // 2.3 SEKUNTLYK SPLASH SCREEN LOGIKASY
+  setTimeout(() => {
+    const splash = document.getElementById('splashScreen');
+    if (splash) splash.classList.add('hidden');
+  }, 2300);
+
   let soldTickets = {};
   const TOTAL_TICKETS = 100000;
   const PAGE_SIZE = 60;
@@ -297,7 +331,6 @@
   let currentFilter = 'all';
   let filteredList = [];
 
-  // DİLLER DÖZÜMI
   const dictionary = {
     tk: {
       welTitle: "Hoş geldiňiz! 🎲",
@@ -317,7 +350,10 @@
       prev: "Yza",
       next: "Öňe",
       page: "Sahypa",
-      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan."
+      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.",
+      randomBtn: "Şansly Bilet",
+      progressLabel: "Satylyş Derejesi",
+      modalTickets: "Satyn alnan jemi biletler:"
     },
     ru: {
       welTitle: "Добро пожаловать! 🎲",
@@ -337,7 +373,10 @@
       prev: "Назад",
       next: "Вперед",
       page: "Страница",
-      footer: "© 2026 Система Лотерейных Билетов. Все права защищены."
+      footer: "© 2026 Система Лотерейных Билетов. Все права защищены.",
+      randomBtn: "Случайный билет",
+      progressLabel: "Прогресс продаж",
+      modalTickets: "Все купленные билеты:"
     },
     en: {
       welTitle: "Welcome! 🎲",
@@ -357,7 +396,10 @@
       prev: "Prev",
       next: "Next",
       page: "Page",
-      footer: "© 2026 Lucky Ticket System. All rights reserved."
+      footer: "© 2026 Lucky Ticket System. All rights reserved.",
+      randomBtn: "Lucky Ticket",
+      progressLabel: "Sales Progress",
+      modalTickets: "All purchased tickets:"
     }
   };
 
@@ -381,6 +423,9 @@
     document.getElementById('prevBtn').innerText = t.prev;
     document.getElementById('nextBtn').innerText = t.next;
     document.getElementById('txt-footer').innerText = t.footer;
+    document.getElementById('txt-random').innerText = t.randomBtn;
+    document.getElementById('txt-progress-label').innerText = t.progressLabel;
+    document.getElementById('txt-modal-tickets').innerText = t.modalTickets;
 
     renderPage();
   }
@@ -399,103 +444,8 @@
       console.log('JSON okaýyşda ýalňyşlyk.');
     }
     updateStats();
+    calculateTop10();
     applyFilters();
   }
 
-  function updateStats() {
-    const soldCount = Object.keys(soldTickets).length;
-    document.getElementById('stat-sold').innerText = soldCount;
-    document.getElementById('stat-free').innerText = TOTAL_TICKETS - soldCount;
-  }
-
-  function applyFilters() {
-    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
-    filteredList = [];
-
-    for (let i = 1; i <= TOTAL_TICKETS; i++) {
-      const isSold = !!soldTickets[i];
-      const owner = soldTickets[i];
-
-      if (currentFilter === 'free' && isSold) continue;
-      if (currentFilter === 'sold' && !isSold) continue;
-
-      if (searchVal !== '') {
-        const numStr = i.toString();
-        const nameStr = isSold ? owner.name.toLowerCase() : '';
-        const phoneStr = isSold ? owner.phone.toLowerCase() : '';
-
-        if (!numStr.includes(searchVal) && !nameStr.includes(searchVal) && !phoneStr.includes(searchVal)) {
-          continue;
-        }
-      }
-
-      filteredList.push(i);
-    }
-
-    currentPage = 1;
-    renderPage();
-  }
-
-  function renderPage() {
-    const grid = document.getElementById('ticketsGrid');
-    grid.innerHTML = '';
-    const t = dictionary[currentLang];
-
-    const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const pageItems = filteredList.slice(startIndex, startIndex + PAGE_SIZE);
-
-    pageItems.forEach(i => {
-      const isSold = !!soldTickets[i];
-      const owner = soldTickets[i];
-      const card = document.createElement('div');
-      card.className = `ticket-card ${isSold ? 'sold' : 'free'}`;
-
-      if (isSold) {
-        card.innerHTML = `
-          <div class="ticket-number">#${i}</div>
-          <span class="ticket-status">${t.statusSold}</span>
-          <div class="owner-info">
-            <span>${owner.name}</span>
-            <small>${owner.phone}</small>
-          </div>
-        `;
-      } else {
-        card.innerHTML = `
-          <div class="ticket-number">#${i}</div>
-          <span class="ticket-status">${t.statusFree}</span>
-          <div class="owner-info" style="border:none; text-align:center;">
-            <small style="color: var(--accent-green);">${t.freeCard}</small>
-          </div>
-        `;
-      }
-      grid.appendChild(card);
-    });
-
-    document.getElementById('pageInfo').innerText = `${t.page} ${currentPage} / ${totalPages}`;
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
-  }
-
-  function changePage(direction) {
-    currentPage += direction;
-    renderPage();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function setFilter(type, btn) {
-    currentFilter = type;
-    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    applyFilters();
-  }
-
-  function onSearchChange() {
-    applyFilters();
-  }
-
-  fetchSoldTickets();
-</script>
-
-</body>
-</html>
+  function updateStat
