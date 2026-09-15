@@ -4,15 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bilet Barla - Şansly Bilet Ulgamy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --bg-color: #0f172a;
       --card-bg: #1e293b;
-      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.08);
       --primary: #6366f1;
-      --primary-hover: #4f46e5;
       --accent-green: #10b981;
       --accent-red: #f43f5e;
       --text-main: #f8fafc;
@@ -24,7 +23,6 @@
       --card-bg: #ffffff;
       --card-border: rgba(0, 0, 0, 0.08);
       --primary: #4f46e5;
-      --primary-hover: #4338ca;
       --accent-green: #059669;
       --accent-red: #e11d48;
       --text-main: #0f172a;
@@ -53,10 +51,10 @@
       border-radius: 12px;
       overflow: hidden;
       margin-bottom: 15px;
-      padding: 8px 12px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     .marquee-label {
@@ -72,8 +70,14 @@
       gap: 5px;
     }
     .marquee-wrapper { overflow: hidden; width: 100%; }
-    .marquee-content { display: inline-block; animation: marquee 20s linear infinite; font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .marquee-item { margin-right: 25px; color: var(--accent-green); }
+    .marquee-content { 
+      display: inline-block; 
+      animation: marquee 45s linear infinite; /* Tizligi haýalladyldy (45s) */
+      font-size: 13px; 
+      font-weight: 700; 
+      white-space: nowrap; 
+    }
+    .marquee-item { margin-right: 35px; color: var(--accent-green); }
 
     /* Controls Header */
     .top-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -97,33 +101,32 @@
     }
     .btn-action:hover { background: var(--primary); color: #fff; }
 
-    /* Banner */
+    /* Owadan Welcome Banner */
     .welcome-banner {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.1));
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.08));
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 20px;
+      padding: 24px 20px;
       text-align: center;
       margin-bottom: 20px;
     }
-    .welcome-banner h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
-    .welcome-banner p { font-size: 13px; color: var(--text-muted); }
+    .welcome-banner h2 { 
+      font-size: 22px; 
+      font-weight: 800; 
+      margin-bottom: 6px; 
+      color: var(--primary); 
+    }
+    .welcome-banner .admin-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
 
     .header { text-align: center; margin-bottom: 20px; }
     .header h1 { font-size: 24px; font-weight: 800; letter-spacing: 0.5px; }
     .header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-
-    /* Progress Bar */
-    .progress-wrapper {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 20px;
-    }
-    .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
-    .progress-bar-bg { background: rgba(0,0,0,0.2); height: 10px; border-radius: 10px; overflow: hidden; }
-    .progress-bar-fill { background: linear-gradient(90deg, var(--primary), var(--accent-green)); height: 100%; width: 0%; transition: width 0.5s ease; }
 
     /* Stats Cards */
     .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -237,7 +240,7 @@
 <div class="container">
   
   <div class="marquee-container">
-    <div class="marquee-label"><i class="fa-solid => fa-trophy"></i> TOP 10</div>
+    <div class="marquee-label"><i class="fa-solid fa-trophy"></i> TOP 10</div>
     <div class="marquee-wrapper">
       <div class="marquee-content" id="top10Marquee">Maglumat ýüklenýär...</div>
     </div>
@@ -255,23 +258,13 @@
   </div>
 
   <div class="welcome-banner">
-    <h2 id="wel-title">Hoş geldiňiz! 🎲</h2>
-    <p id="wel-desc">Bu Administration - Aşakdaky sanawdan öz biletleriňizi barlap bilersiňiz.</p>
+    <h2 id="wel-title">Hoş geldiňiz bijeli oýuna! 🎲</h2>
+    <p class="admin-text" id="wel-desc">Administrator</p>
   </div>
 
   <div class="header">
     <h1 id="txt-title">BİLET SANAW ULGAMY</h1>
     <p id="txt-subtitle">1-den 100000-e çenli biletleriň satylyş ýagdaýy</p>
-  </div>
-
-  <div class="progress-wrapper">
-    <div class="progress-info">
-      <span id="txt-progress-label">Satylyş Derejesi</span>
-      <span id="progress-text">0%</span>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressBar"></div>
-    </div>
   </div>
 
   <div class="stats-container">
@@ -329,12 +322,11 @@
 </div>
 
 <script>
-  // Demo maglumatlar (tickets.json tapylmasa awtomatiki görkeziler)
   let soldTickets = {
-    "12": { "name": "Aman H.", "phone": "+99365000000" },
-    "15": { "name": "Aman H.", "phone": "+99365000000" },
-    "104": { "name": "Meredov B.", "phone": "+99364112233" },
-    "500": { "name": "Sähet R.", "phone": "+99363998877" }
+    "12": { "name": "Maksat Gurbangeldiyew", "phone": "+99365000000" },
+    "15": { "name": "Maksat Gurbangeldiyew", "phone": "+99365000000" },
+    "104": { "name": "Begench Meredov", "phone": "+99364112233" },
+    "500": { "name": "Sahet Rustemow", "phone": "+99363998877" }
   };
 
   const TOTAL_TICKETS = 100000;
@@ -345,28 +337,28 @@
 
   const dictionary = {
     tk: {
-      welTitle: "Hoş geldiňiz! 🎲", welDesc: "Bu Administration - Aşakdaky sanawdan öz biletleriňizi barlap bilersiňiz.",
+      welTitle: "Hoş geldiňiz bijeli oýuna! 🎲", welDesc: "Administrator",
       title: "BİLET SANAW ULGAMY", subtitle: "1-den 100000-e çenli biletleriň satylyş ýagdaýy",
       statTotal: "JEMI BİLET", statSold: "SATYLDY", statFree: "BOŞ BİLET",
       searchPlaceholder: "Bilet belgisi ýa-da at gözle...", btnAll: "Ählisi", btnFree: "Boş", btnSold: "Satylanlar",
       statusSold: "Satyldy", statusFree: "Boş", freeCard: "Boş Bilet", prev: "Yza", next: "Öňe", page: "Sahypa",
-      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.", randomBtn: "Şansly", progressLabel: "Satylyş Derejesi", modalTickets: "Satyn alnan biletler:"
+      footer: "© 2026 Şansly Bilet Ulgamy. Ähli maglumatlar goralan.", randomBtn: "Şansly", modalTickets: "Satyn alnan biletler:"
     },
     ru: {
-      welTitle: "Добро пожаловать! 🎲", welDesc: "Bu Administration - В списке ниже вы можете удобно проверить свои билеты.",
+      welTitle: "Добро пожаловать в тиражную игру! 🎲", welDesc: "Администратор",
       title: "СИСТЕМА БИЛЕТОВ", subtitle: "Статус продажи билетов от 1 до 100000",
       statTotal: "ВСЕГО БИЛЕТОВ", statSold: "ПРОДАНО", statFree: "СВОБОДНО",
       searchPlaceholder: "Поиск по номеру или имени...", btnAll: "Все", btnFree: "Свободные", btnSold: "Проданные",
       statusSold: "Продано", statusFree: "Свободно", freeCard: "Свободный билет", prev: "Назад", next: "Вперед", page: "Страница",
-      footer: "© 2026 Система Лотерейных Билетов. Все права защищены.", randomBtn: "Случайный", progressLabel: "Прогресс продаж", modalTickets: "Купленные билеты:"
+      footer: "© 2026 Система Лотерейных Билетов. Все права защищены.", randomBtn: "Случайный", modalTickets: "Купленные билеты:"
     },
     en: {
-      welTitle: "Welcome! 🎲", welDesc: "Bu Administration - You can conveniently check your tickets.",
+      welTitle: "Welcome to the lottery game! 🎲", welDesc: "Administrator",
       title: "TICKET SYSTEM", subtitle: "Ticket status from 1 to 100000",
       statTotal: "TOTAL TICKETS", statSold: "SOLD", statFree: "AVAILABLE",
       searchPlaceholder: "Search by ticket number or name...", btnAll: "All", btnFree: "Available", btnSold: "Sold",
       statusSold: "Sold", statusFree: "Free", freeCard: "Available Ticket", prev: "Prev", next: "Next", page: "Page",
-      footer: "© 2026 Lucky Ticket System. All rights reserved.", randomBtn: "Lucky", progressLabel: "Sales Progress", modalTickets: "Purchased tickets:"
+      footer: "© 2026 Lucky Ticket System. All rights reserved.", randomBtn: "Lucky", modalTickets: "Purchased tickets:"
     }
   };
 
@@ -390,7 +382,6 @@
     document.getElementById('nextBtn').innerText = t.next;
     document.getElementById('txt-footer').innerText = t.footer;
     document.getElementById('txt-random').innerText = t.randomBtn;
-    document.getElementById('txt-progress-label').innerText = t.progressLabel;
     document.getElementById('txt-modal-tickets').innerText = t.modalTickets;
     renderPage();
   }
@@ -403,9 +394,7 @@
       if (response.ok) {
         soldTickets = await response.json();
       }
-    } catch (e) {
-      console.log('JSON ýüklenmedi, demo maglumat ulanylýar');
-    }
+    } catch (e) {}
     updateStats();
     calculateTop10();
     applyFilters();
@@ -415,9 +404,6 @@
     const soldCount = Object.keys(soldTickets).length;
     document.getElementById('stat-sold').innerText = soldCount;
     document.getElementById('stat-free').innerText = (TOTAL_TICKETS - soldCount).toLocaleString();
-    const percent = ((soldCount / TOTAL_TICKETS) * 100).toFixed(2);
-    document.getElementById('progressBar').style.width = percent + '%';
-    document.getElementById('progress-text').innerText = percent + '%';
   }
 
   function calculateTop10() {
@@ -428,8 +414,10 @@
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
     const marqueeDiv = document.getElementById('top10Marquee');
     if (sorted.length === 0) { marqueeDiv.innerHTML = "Entek bilet satylmady."; return; }
+    
+    /* Diňe Ady we Familýasy görkezilýär (bilet sany aýryldy) */
     marqueeDiv.innerHTML = sorted.map((item, index) => 
-      `<span class="marquee-item">🏆 #${index + 1} ${item[0]} (${item[1]} bilet)</span>`
+      `<span class="marquee-item">🏆 #${index + 1} ${item[0]}</span>`
     ).join(' ');
   }
 
@@ -506,7 +494,8 @@
     const userTickets = [];
     for (const [id, info] of Object.entries(soldTickets)) {
       if (info.phone === phone) userTickets.push(`#${id}`);
-    }
+
+   }
     document.getElementById('modalTicketsList').innerHTML = userTickets.map(t => `<span class="modal-ticket-badge">${t}</span>`).join('');
     document.getElementById('userModal').classList.add('active');
   }
@@ -525,4 +514,4 @@
   fetchSoldTickets();
 </script>
 </body>
-</html>  
+</html>
